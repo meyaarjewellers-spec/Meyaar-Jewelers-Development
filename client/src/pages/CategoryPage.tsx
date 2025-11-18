@@ -3,12 +3,21 @@ import Footer from "@/components/Footer";
 import CategoryGrid from "@/components/CategoryGrid";
 import type { Product } from "@/components/ProductCard";
 
-import necklace1 from "@assets/generated_images/Statement_necklace_product_9a7d889c.png";
-import necklace2 from "@assets/generated_images/Layered_necklace_product_6a0328df.png";
-import earring1 from "@assets/generated_images/Geometric_hoop_earrings_f96346b0.png";
-import earring2 from "@assets/generated_images/Drop_earrings_product_ad5ef7d3.png";
-import bracelet1 from "@assets/generated_images/Chain_bracelet_product_cd59a224.png";
-import bracelet2 from "@assets/generated_images/Cuff_bracelet_product_13c33cb4.png";
+import necklace1 from "@assets/Place_the_jewelry_on_a_linen_or-0 (11)_1763434693374.jpg";
+import necklace2 from "@assets/Place_the_jewelry_on_a_linen_or-0 (15)_1763434693375.jpg";
+import earring1 from "@assets/Generate_a_professional_high-en-0 (3)_1763434693372.jpg";
+import earring2 from "@assets/Place_the_jewelry_on_a_linen_or-0 (5)_1763434693373.jpg";
+import earring3 from "@assets/Place_the_jewelry_on_a_linen_or-0 (6)_1763434693373.jpg";
+import earring4 from "@assets/Place_the_jewelry_on_a_linen_or-0 (7)_1763434693373.jpg";
+import earring5 from "@assets/Place_the_jewelry_on_a_linen_or-0 (1)_1763434693373.jpg";
+import earring6 from "@assets/Place_the_jewelry_on_a_linen_or-0 (14)_1763434693374.jpg";
+import earring7 from "@assets/Place_the_jewelry_on_a_linen_or-0 (4)_1763434693373.jpg";
+import earring8 from "@assets/Place_the_jewelry_on_a_linen_or-0 (16)_1763434693375.jpg";
+import earring9 from "@assets/Place_the_jewelry_on_a_linen_or-0 (17)_1763434693375.jpg";
+import bracelet1 from "@assets/Generate_a_professional_high-en-0 (2)_1763434693372.jpg";
+import bracelet2 from "@assets/Place_the_jewelry_on_a_linen_or-0 (2)_1763434693373.jpg";
+import bracelet3 from "@assets/Place_the_jewelry_on_a_linen_or-0 (8)_1763434693374.jpg";
+import bracelet4 from "@assets/Place_the_jewelry_on_a_linen_or-0 (9)_1763434693374.jpg";
 
 interface CategoryPageProps {
   category: "necklaces" | "bracelets" | "earrings";
@@ -31,7 +40,7 @@ export default function CategoryPage({ category }: CategoryPageProps) {
     necklaces: [
       {
         id: "n1",
-        name: "Artisan Circle Necklace",
+        name: "Emerald Pearl Layered Necklace",
         price: 189,
         image: necklace1,
         category: "necklaces",
@@ -39,63 +48,49 @@ export default function CategoryPage({ category }: CategoryPageProps) {
       },
       {
         id: "n2",
-        name: "Layered Bronze Necklace",
-        price: 145,
+        name: "Green Beaded Multi-Strand Necklace",
+        price: 165,
         image: necklace2,
-        category: "necklaces",
-      },
-      {
-        id: "n3",
-        name: "Mandala Statement Necklace",
-        price: 225,
-        image: necklace1,
         category: "necklaces",
         isLimited: true,
-      },
-      {
-        id: "n4",
-        name: "Delicate Chain Necklace",
-        price: 98,
-        image: necklace2,
-        category: "necklaces",
       },
     ],
     bracelets: [
       {
         id: "b1",
-        name: "Chain Link Bracelet",
-        price: 125,
+        name: "Double Pearl Bracelet",
+        price: 95,
         image: bracelet1,
         category: "bracelets",
         isLimited: true,
       },
       {
         id: "b2",
-        name: "Engraved Cuff Bracelet",
-        price: 165,
+        name: "Pearl Branch Bracelet",
+        price: 115,
         image: bracelet2,
         category: "bracelets",
       },
       {
         id: "b3",
-        name: "Artisan Chain Bracelet",
+        name: "Pink & Pearl Statement Bracelet",
         price: 135,
-        image: bracelet1,
+        image: bracelet3,
         category: "bracelets",
+        isLimited: true,
       },
       {
         id: "b4",
-        name: "Bronze Cuff",
-        price: 145,
-        image: bracelet2,
+        name: "Fuchsia Pearl Cluster Bracelet",
+        price: 125,
+        image: bracelet4,
         category: "bracelets",
-        isLimited: true,
       },
     ],
     earrings: [
       {
         id: "e1",
-        name: "Geometric Hoop Earrings",
+        name: "Crystal Beaded Hoop Earrings",
         price: 89,
         image: earring1,
         category: "earrings",
@@ -103,25 +98,61 @@ export default function CategoryPage({ category }: CategoryPageProps) {
       },
       {
         id: "e2",
-        name: "Medallion Drop Earrings",
-        price: 125,
-        image: earring2,
+        name: "Turquoise Fan Earrings",
+        price: 145,
+        image: earring3,
         category: "earrings",
+        isLimited: true,
       },
       {
         id: "e3",
-        name: "Bronze Hoops",
-        price: 75,
-        image: earring1,
+        name: "Aqua Pearl Fan Earrings",
+        price: 135,
+        image: earring4,
         category: "earrings",
       },
       {
         id: "e4",
-        name: "Artisan Drops",
-        price: 115,
+        name: "Vintage Bronze Flower Earrings",
+        price: 78,
+        image: earring5,
+        category: "earrings",
+      },
+      {
+        id: "e5",
+        name: "Pearl Cluster Chain Earrings",
+        price: 85,
         image: earring2,
         category: "earrings",
+      },
+      {
+        id: "e6",
+        name: "Gold Geometric Pearl Earrings",
+        price: 125,
+        image: earring6,
+        category: "earrings",
         isLimited: true,
+      },
+      {
+        id: "e7",
+        name: "Pearl Chain Drop Earrings",
+        price: 95,
+        image: earring7,
+        category: "earrings",
+      },
+      {
+        id: "e8",
+        name: "Pink Beaded Chain Earrings",
+        price: 75,
+        image: earring8,
+        category: "earrings",
+      },
+      {
+        id: "e9",
+        name: "Blue Crystal Tassel Earrings",
+        price: 85,
+        image: earring9,
+        category: "earrings",
       },
     ],
   };

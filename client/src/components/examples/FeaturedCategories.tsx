@@ -1,7 +1,7 @@
 import FeaturedCategories from '../FeaturedCategories';
-import necklaceImg from '@assets/generated_images/Statement_necklace_product_9a7d889c.png';
-import braceletImg from '@assets/generated_images/Chain_bracelet_product_cd59a224.png';
-import earringImg from '@assets/generated_images/Geometric_hoop_earrings_f96346b0.png';
+import necklaceImg from '@assets/Place_the_jewelry_on_a_linen_or-0 (11)_1763434693374.jpg';
+import braceletImg from '@assets/Generate_a_professional_high-en-0 (2)_1763434693372.jpg';
+import earringImg from '@assets/Generate_a_professional_high-en-0 (3)_1763434693372.jpg';
 
 export default function FeaturedCategoriesExample() {
   const categories = [

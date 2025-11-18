@@ -9,10 +9,10 @@ import { Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-import necklace1 from "@assets/generated_images/Statement_necklace_product_9a7d889c.png";
-import necklace2 from "@assets/generated_images/Layered_necklace_product_6a0328df.png";
-import earring1 from "@assets/generated_images/Geometric_hoop_earrings_f96346b0.png";
-import bracelet1 from "@assets/generated_images/Chain_bracelet_product_cd59a224.png";
+import necklace1 from "@assets/Place_the_jewelry_on_a_linen_or-0 (11)_1763434693374.jpg";
+import necklace2 from "@assets/Place_the_jewelry_on_a_linen_or-0 (15)_1763434693375.jpg";
+import earring1 from "@assets/Generate_a_professional_high-en-0 (3)_1763434693372.jpg";
+import bracelet1 from "@assets/Generate_a_professional_high-en-0 (2)_1763434693372.jpg";
 
 export default function ProductDetail() {
   const [, params] = useRoute("/product/:id");
@@ -21,20 +21,20 @@ export default function ProductDetail() {
 
   const mockProduct = {
     id: params?.id || "1",
-    name: "Artisan Circle Necklace",
+    name: "Emerald Pearl Layered Necklace",
     price: 189,
     image: necklace1,
-    description: "A stunning handcrafted necklace featuring intricate circular mandala designs. This piece showcases expert metalwork and attention to detail, making it a true statement piece for any occasion.",
+    description: "An exquisite handcrafted necklace featuring luminous pearls and emerald green crystal beads in a sophisticated multi-strand design. Each bead is carefully selected and hand-strung to create this timeless piece.",
     isLimited: true,
-    materials: "Bronze, copper accents",
-    dimensions: "Pendant: 2.5 inches diameter, Chain: 18 inches",
-    care: "Clean with soft cloth. Avoid water and harsh chemicals. Store in a dry place.",
+    materials: "Freshwater pearls, emerald crystal beads, gold-plated chain and clasp",
+    dimensions: "Length: 16-18 inches adjustable",
+    care: "Wipe gently with soft cloth after wearing. Avoid contact with perfumes, lotions, and water. Store in provided jewelry pouch.",
   };
 
   const relatedProducts = [
-    { id: "2", name: "Layered Necklace", price: 145, image: necklace2 },
-    { id: "3", name: "Hoop Earrings", price: 89, image: earring1 },
-    { id: "4", name: "Chain Bracelet", price: 125, image: bracelet1 },
+    { id: "2", name: "Green Beaded Necklace", price: 165, image: necklace2 },
+    { id: "3", name: "Crystal Hoop Earrings", price: 89, image: earring1 },
+    { id: "4", name: "Pearl Bracelet", price: 95, image: bracelet1 },
   ];
 
   const handleAddToCart = () => {

@@ -1,10 +1,10 @@
 import InstagramFeed from '../InstagramFeed';
-import img1 from '@assets/generated_images/Instagram_lifestyle_shot_1_ec436832.png';
-import img2 from '@assets/generated_images/Instagram_lifestyle_shot_2_07788095.png';
-import img3 from '@assets/generated_images/Statement_necklace_product_9a7d889c.png';
-import img4 from '@assets/generated_images/Geometric_hoop_earrings_f96346b0.png';
-import img5 from '@assets/generated_images/Layered_necklace_product_6a0328df.png';
-import img6 from '@assets/generated_images/Chain_bracelet_product_cd59a224.png';
+import img1 from '@assets/Place_the_jewelry_on_a_linen_or-0 (3)_1763434693373.jpg';
+import img2 from '@assets/Place_the_jewelry_on_a_linen_or-0 (5)_1763434693373.jpg';
+import img3 from '@assets/Place_the_jewelry_on_a_linen_or-0 (13)_1763434693374.jpg';
+import img4 from '@assets/Place_the_jewelry_on_a_linen_or-0 (12)_1763434693374.jpg';
+import img5 from '@assets/Place_the_jewelry_on_a_linen_or-0 (8)_1763434693374.jpg';
+import img6 from '@assets/Place_the_jewelry_on_a_linen_or-0 (11)_1763434693374.jpg';
 
 export default function InstagramFeedExample() {
   const images = [img1, img2, img3, img4, img5, img6];

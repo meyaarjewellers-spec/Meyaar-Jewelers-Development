@@ -1,10 +1,10 @@
 import ProductCard from '../ProductCard';
-import necklaceImage from '@assets/generated_images/Statement_necklace_product_9a7d889c.png';
+import necklaceImage from '@assets/Place_the_jewelry_on_a_linen_or-0 (11)_1763434693374.jpg';
 
 export default function ProductCardExample() {
   const product = {
     id: "1",
-    name: "Artisan Circle Necklace",
+    name: "Emerald Pearl Layered Necklace",
     price: 189,
     image: necklaceImage,
     category: "necklaces" as const,
