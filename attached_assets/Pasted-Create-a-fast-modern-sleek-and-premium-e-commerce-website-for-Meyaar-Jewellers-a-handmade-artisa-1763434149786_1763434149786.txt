@@ -1,0 +1,105 @@
+Create a fast, modern, sleek, and premium e-commerce website for Meyaar Jewellers, a handmade artisan luxury jewelry brand established in 2025. The brand sells necklaces, bracelets, and earrings only.
+
+Use a visual style similar to gorjana.com in layout, spacing, product display style, typography cleanliness, and premium feel — but adapt it to a more handcrafted, limited-edition aesthetic.
+
+The brand identity is warm, elegant, and minimal. Use this color palette based on the logo image:
+
+Background cream: #FCF5EB
+
+Warm artisan browns:
+
+#C38F77 (primary accent)
+
+#A96142 (secondary accent)
+
+#AD6954 (deep accent)
+
+Black for typography and outlines
+
+Overall tone: modern, soft, warm, artisan luxury.
+
+Website Requirements:
+
+Homepage
+
+Large hero banner showcasing handmade jewelry pieces
+
+Minimalist text: “Handcrafted Artisan Luxury” + CTA “Shop the Collection”
+
+Highlight the brand’s uniqueness: limited quantities, handmade craftsmanship, small-batch production
+
+Product Categories
+
+Three main sections:
+
+Necklaces
+
+Bracelets
+
+Earrings
+
+Clean card layout similar to Gorjana, with soft shadows, breathable spacing, neutral background
+
+Quick-view option for products
+
+Product Pages
+
+High-quality imagery
+
+Short, clean luxury-oriented descriptions
+
+“This piece is handcrafted in limited quantity” badge
+
+Materials, dimensions, and care details
+
+Add-to-cart + related items section
+
+About Page
+
+Story of Meyaar Jewellers
+
+Emphasis on handmade craftsmanship, artisan techniques, limited production, and timeless design
+
+Light neutral background + warm brown accents
+
+Navigation
+
+Very clean, minimal top menu
+
+Logo centered or left-aligned
+
+Shop → Necklaces / Bracelets / Earrings
+
+About / Contact
+
+Brand Feel
+
+Soft, neutral colors
+
+Modern serif + clean sans-serif pairing
+
+Simple line elements using accent brown
+
+Light animations, smooth transitions
+
+Luxury but approachable, handcrafted aesthetic
+
+Mobile Optimization
+
+Fast-loading
+
+Clean mobile product grid
+
+Sticky bottom add-to-cart on product pages
+
+Additional Elements
+
+Instagram feed section (“Handmade with Love”)
+
+Newsletter sign-up
+
+Reviews / Testimonials
+
+Footer with minimal layout
+
+Use the color palette strictly and maintain a warm, handcrafted luxury feel throughout.
