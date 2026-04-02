@@ -2,12 +2,12 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 
-import workshopImage from "@assets/generated_images/Workshop_craftsmanship_scene_150bbc44.png";
-import heroImage from "@assets/generated_images/Hero_banner_jewelry_display_9438a15d.png";
+import workshopImage from "@assets/Generate_a_professional_high-en-0 (2)_1763434693372.jpg";
+import heroImage from "@assets/Generate_a_professional_high-en-0_1763434693372.jpg";
 
 export default function About() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-amber-50">
       <Header cartItemCount={0} />
       
       <main className="flex-1">
@@ -15,16 +15,16 @@ export default function About() {
           className="relative h-[60vh] flex items-center justify-center overflow-hidden"
           style={{ backgroundImage: `url(${heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60" />
           <div className="relative z-10 text-center px-4">
             <h1 
               className="font-serif text-5xl md:text-6xl font-bold text-white mb-4"
               data-testid="text-about-title"
             >
-              Our Story
+              The Art of Craftsmanship
             </h1>
             <p className="text-xl text-white/90 max-w-2xl mx-auto">
-              Handcrafted artisan luxury, made with timeless craftsmanship
+              Pakistani heritage, handcrafted in the USA
             </p>
           </div>
         </div>
@@ -32,7 +32,7 @@ export default function About() {
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto space-y-12">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <Card className="overflow-hidden aspect-square">
+              <Card className="overflow-hidden aspect-square shadow-lg">
                 <img
                   src={workshopImage}
                   alt="Artisan workshop"
@@ -43,85 +43,91 @@ export default function About() {
               
               <div className="space-y-4">
                 <h2 
-                  className="font-serif text-3xl font-bold"
+                  className="font-serif text-4xl font-bold text-amber-900"
                   data-testid="text-section1-title"
                 >
-                  Established in 2025
+                  Heritage & Heritage
                 </h2>
-                <p className="text-muted-foreground" data-testid="text-section1-p1">
-                  Meyaar Jewellers was born from a passion for creating beautiful, handcrafted jewelry 
-                  that tells a story. Our founder, inspired by traditional metalworking techniques and 
-                  modern design sensibilities, set out to create pieces that are both timeless and contemporary.
+                <div className="h-1 w-16 bg-gradient-to-r from-amber-600 to-yellow-600"></div>
+                <p className="text-slate-700 leading-relaxed" data-testid="text-section1-p1">
+                  Meyaar Jewellers draws inspiration from the rich tradition of Pakistani metalwork, 
+                  where artisans have perfected their craft over centuries. Our founder reconnected with 
+                  this heritage, and now every piece is handcrafted in the USA by skilled artisans trained in 
+                  traditional Pakistani techniques.
                 </p>
-                <p className="text-muted-foreground" data-testid="text-section1-p2">
-                  Each piece in our collection is meticulously handcrafted by skilled artisans who bring 
-                  decades of experience and an unwavering commitment to quality.
+                <p className="text-slate-700 leading-relaxed" data-testid="text-section1-p2">
+                  Each piece is meticulously handcrafted right here in the United States by artisans trained in 
+                  traditional Pakistani jewelry-making techniques passed down through generations. We honor the heritage 
+                  while creating contemporary designs for the discerning collector.
                 </p>
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-6 mt-16">
               <h2 
-                className="font-serif text-3xl font-bold"
+                className="font-serif text-4xl font-bold text-center text-amber-900"
                 data-testid="text-section2-title"
               >
-                Our Craftsmanship
+                The Meyaar Promise
               </h2>
+              <div className="h-1 w-16 bg-gradient-to-r from-amber-600 to-yellow-600 mx-auto"></div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card className="p-6">
-                  <h3 className="font-serif text-xl font-bold mb-2" data-testid="text-craft1-title">
-                    Handmade
+                <Card className="p-8 border-amber-200 bg-white hover:shadow-lg transition">
+                  <h3 className="font-serif text-2xl font-bold mb-3 text-amber-900" data-testid="text-craft1-title">
+                    ⚒️ Handcrafted
                   </h3>
-                  <p className="text-sm text-muted-foreground" data-testid="text-craft1-desc">
-                    Every piece is crafted by hand, ensuring unique character and exceptional quality.
+                  <p className="text-sm text-slate-700" data-testid="text-craft1-desc">
+                    Every piece is individually crafted by master artisans, ensuring no two pieces are ever identical. Pure artisanal mastery.
                   </p>
                 </Card>
                 
-                <Card className="p-6">
-                  <h3 className="font-serif text-xl font-bold mb-2" data-testid="text-craft2-title">
-                    Limited Edition
+                <Card className="p-8 border-amber-200 bg-white hover:shadow-lg transition">
+                  <h3 className="font-serif text-2xl font-bold mb-3 text-amber-900" data-testid="text-craft2-title">
+                    👑 Limited Edition
                   </h3>
-                  <p className="text-sm text-muted-foreground" data-testid="text-craft2-desc">
-                    Small batch production means each design is truly exclusive and rare.
+                  <p className="text-sm text-slate-700" data-testid="text-craft2-desc">
+                    Small batch production maintains exclusivity and rarity. Your piece is truly one-of-a-kind.
                   </p>
                 </Card>
                 
-                <Card className="p-6">
-                  <h3 className="font-serif text-xl font-bold mb-2" data-testid="text-craft3-title">
-                    Timeless Design
+                <Card className="p-8 border-amber-200 bg-white hover:shadow-lg transition">
+                  <h3 className="font-serif text-2xl font-bold mb-3 text-amber-900" data-testid="text-craft3-title">
+                    ✨ Legacy Quality
                   </h3>
-                  <p className="text-sm text-muted-foreground" data-testid="text-craft3-desc">
-                    Classic aesthetics meet contemporary style for pieces you'll treasure forever.
+                  <p className="text-sm text-slate-700" data-testid="text-craft3-desc">
+                    Heirloom-quality pieces designed to be passed down through generations and treasured forever.
                   </p>
                 </Card>
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-6 mt-16">
               <h2 
-                className="font-serif text-3xl font-bold"
+                className="font-serif text-4xl font-bold text-center text-amber-900"
                 data-testid="text-section3-title"
               >
-                Our Materials
+                Premium Materials
               </h2>
-              <p className="text-muted-foreground" data-testid="text-section3-p1">
-                We work primarily with bronze and copper, metals that have been used in jewelry-making 
-                for thousands of years. These warm-toned metals develop a beautiful patina over time, 
-                making each piece even more unique as it ages with you.
+              <div className="h-1 w-16 bg-gradient-to-r from-amber-600 to-yellow-600 mx-auto"></div>
+              <p className="text-slate-700 leading-relaxed text-center" data-testid="text-section3-p1">
+                We work exclusively with bronze, copper, and precious metals sourced from ethical suppliers. 
+                These materials have been used by master craftsmen for millennia, developing a distinctive patina 
+                that makes each piece more beautiful with age—true marks of authenticity and time.
               </p>
-              <p className="text-muted-foreground" data-testid="text-section3-p2">
-                Our commitment to quality means we source only the finest materials and use traditional 
-                techniques passed down through generations of artisans.
+              <p className="text-slate-700 leading-relaxed text-center" data-testid="text-section3-p2">
+                Our commitment to uncompromising quality means we source only the finest materials and employ 
+                traditional techniques that celebrate the inherent beauty of each metal. This is luxury without ostentation—
+                the quiet confidence of true craftsmanship.
               </p>
             </div>
 
-            <div className="bg-muted/30 p-8 rounded-md text-center">
+            <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 p-12 rounded-lg text-center mt-16">
               <p 
-                className="font-serif text-2xl italic text-foreground"
+                className="font-serif text-2xl italic text-amber-900 leading-relaxed"
                 data-testid="text-quote"
               >
-                "We believe jewelry should be more than an accessory. It should be a work of art, 
-                a conversation starter, and a treasured heirloom."
+                "In a world of mass production, we believe in the power of intention. Every piece tells the story 
+                of the hands that created it—a testament to artistry, heritage, and the timeless pursuit of perfection."
               </p>
             </div>
           </div>

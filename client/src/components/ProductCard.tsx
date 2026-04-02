@@ -10,6 +10,8 @@ export interface Product {
   image: string;
   category: "necklaces" | "bracelets" | "earrings";
   isLimited?: boolean;
+  rating?: number;
+  reviewCount?: number;
 }
 
 interface ProductCardProps {
@@ -61,12 +63,27 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
       <div className="p-4">
         <Link href={`/product/${product.id}`}>
           <h3 
-            className="font-medium text-base mb-1 text-foreground hover:text-primary transition-colors"
+            className="font-medium text-base mb-2 text-foreground hover:text-primary transition-colors"
             data-testid={`text-product-name-${product.id}`}
           >
             {product.name}
           </h3>
         </Link>
+        
+        {/* Star Rating */}
+        {product.rating && product.reviewCount !== undefined && (
+          <div className="flex items-center gap-2 mb-2">
+            <div className="flex gap-0.5">
+              {[...Array(5)].map((_, i) => (
+                <span key={i} className="text-yellow-500">★</span>
+              ))}
+            </div>
+            <span className="text-sm text-muted-foreground">
+              ({product.reviewCount})
+            </span>
+          </div>
+        )}
+        
         <p 
           className="text-lg font-serif text-foreground"
           data-testid={`text-product-price-${product.id}`}

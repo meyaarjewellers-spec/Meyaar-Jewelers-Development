@@ -45,6 +45,8 @@ export default function CategoryPage({ category }: CategoryPageProps) {
         image: necklace1,
         category: "necklaces",
         isLimited: true,
+        rating: 5,
+        reviewCount: 140,
       },
       {
         id: "n2",
@@ -53,6 +55,8 @@ export default function CategoryPage({ category }: CategoryPageProps) {
         image: necklace2,
         category: "necklaces",
         isLimited: true,
+        rating: 5,
+        reviewCount: 81,
       },
     ],
     bracelets: [
@@ -63,6 +67,8 @@ export default function CategoryPage({ category }: CategoryPageProps) {
         image: bracelet1,
         category: "bracelets",
         isLimited: true,
+        rating: 5,
+        reviewCount: 81,
       },
       {
         id: "b2",
@@ -70,6 +76,8 @@ export default function CategoryPage({ category }: CategoryPageProps) {
         price: 115,
         image: bracelet2,
         category: "bracelets",
+        rating: 5,
+        reviewCount: 65,
       },
       {
         id: "b3",
@@ -78,6 +86,8 @@ export default function CategoryPage({ category }: CategoryPageProps) {
         image: bracelet3,
         category: "bracelets",
         isLimited: true,
+        rating: 5,
+        reviewCount: 92,
       },
       {
         id: "b4",
@@ -85,6 +95,8 @@ export default function CategoryPage({ category }: CategoryPageProps) {
         price: 125,
         image: bracelet4,
         category: "bracelets",
+        rating: 5,
+        reviewCount: 58,
       },
     ],
     earrings: [
@@ -95,6 +107,8 @@ export default function CategoryPage({ category }: CategoryPageProps) {
         image: earring1,
         category: "earrings",
         isLimited: true,
+        rating: 5,
+        reviewCount: 73,
       },
       {
         id: "e2",
@@ -103,6 +117,8 @@ export default function CategoryPage({ category }: CategoryPageProps) {
         image: earring3,
         category: "earrings",
         isLimited: true,
+        rating: 5,
+        reviewCount: 54,
       },
       {
         id: "e3",
@@ -110,6 +126,8 @@ export default function CategoryPage({ category }: CategoryPageProps) {
         price: 135,
         image: earring4,
         category: "earrings",
+        rating: 5,
+        reviewCount: 68,
       },
       {
         id: "e4",
@@ -117,6 +135,8 @@ export default function CategoryPage({ category }: CategoryPageProps) {
         price: 78,
         image: earring5,
         category: "earrings",
+        rating: 5,
+        reviewCount: 47,
       },
       {
         id: "e5",
@@ -124,6 +144,8 @@ export default function CategoryPage({ category }: CategoryPageProps) {
         price: 85,
         image: earring2,
         category: "earrings",
+        rating: 5,
+        reviewCount: 61,
       },
       {
         id: "e6",
@@ -132,6 +154,8 @@ export default function CategoryPage({ category }: CategoryPageProps) {
         image: earring6,
         category: "earrings",
         isLimited: true,
+        rating: 5,
+        reviewCount: 85,
       },
       {
         id: "e7",
@@ -139,6 +163,8 @@ export default function CategoryPage({ category }: CategoryPageProps) {
         price: 95,
         image: earring7,
         category: "earrings",
+        rating: 5,
+        reviewCount: 52,
       },
       {
         id: "e8",
@@ -146,6 +172,8 @@ export default function CategoryPage({ category }: CategoryPageProps) {
         price: 75,
         image: earring8,
         category: "earrings",
+        rating: 5,
+        reviewCount: 43,
       },
       {
         id: "e9",
@@ -153,6 +181,8 @@ export default function CategoryPage({ category }: CategoryPageProps) {
         price: 85,
         image: earring9,
         category: "earrings",
+        rating: 5,
+        reviewCount: 69,
       },
     ],
   };

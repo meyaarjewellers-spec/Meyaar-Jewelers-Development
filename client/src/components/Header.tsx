@@ -47,24 +47,25 @@ export default function Header({ cartItemCount = 0 }: HeaderProps) {
           </nav>
 
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="relative"
-              data-testid="button-cart"
-              onClick={() => console.log("Cart clicked")}
-            >
-              <ShoppingCart className="h-5 w-5" />
-              {cartItemCount > 0 && (
-                <Badge
-                  variant="destructive"
-                  className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
-                  data-testid="badge-cart-count"
-                >
-                  {cartItemCount}
-                </Badge>
-              )}
-            </Button>
+            <Link href="/checkout" data-testid="link-checkout">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative"
+                data-testid="button-cart"
+              >
+                <ShoppingCart className="h-5 w-5" />
+                {cartItemCount > 0 && (
+                  <Badge
+                    variant="destructive"
+                    className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                    data-testid="badge-cart-count"
+                  >
+                    {cartItemCount}
+                  </Badge>
+                )}
+              </Button>
+            </Link>
 
             <Button
               variant="ghost"

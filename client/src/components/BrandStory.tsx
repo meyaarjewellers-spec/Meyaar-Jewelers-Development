@@ -19,8 +19,8 @@ export default function BrandStory({ image }: BrandStoryProps) {
             <div className="space-y-4 text-muted-foreground">
               <p data-testid="text-story-p1">
                 At Meyaar Jewellers, every piece tells a story of dedication, artistry, and timeless beauty. 
-                Established in 2025, we bring you handcrafted jewelry that celebrates the art of metalwork 
-                and the beauty of limited-edition design.
+                Established in 2025, we bring you handcrafted jewelry made in the USA, inspired by the rich heritage 
+                of Pakistani metalwork, celebrating the art of traditional jewelry-making and limited-edition design.
               </p>
               <p data-testid="text-story-p2">
                 Our artisans pour their hearts into each creation, ensuring that every necklace, bracelet, 

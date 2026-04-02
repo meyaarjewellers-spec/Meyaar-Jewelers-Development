@@ -4,14 +4,16 @@ import FeaturedCategories from "@/components/FeaturedCategories";
 import BrandStory from "@/components/BrandStory";
 import Testimonials from "@/components/Testimonials";
 import InstagramFeed from "@/components/InstagramFeed";
+import Benefits from "@/components/Benefits";
 import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
+import FirstTimePopup from "@/components/FirstTimePopup";
 
-import heroImage from "@assets/generated_images/Hero_banner_jewelry_display_9438a15d.png";
+import heroImage from "@assets/Generate_a_professional_high-en-0_1763434693372.jpg";
 import necklaceImg from "@assets/Place_the_jewelry_on_a_linen_or-0 (11)_1763434693374.jpg";
-import braceletImg from "@assets/Generate_a_professional_high-en-0 (2)_1763434693372.jpg";
-import earringImg from "@assets/Generate_a_professional_high-en-0 (3)_1763434693372.jpg";
-import workshopImage from "@assets/generated_images/Workshop_craftsmanship_scene_150bbc44.png";
+import braceletImg from "@assets/Place_the_jewelry_on_a_linen_or-0 (8)_1763434693374.jpg";
+import earringImg from "@assets/Place_the_jewelry_on_a_linen_or-0 (3)_1763434693373.jpg";
+import workshopImage from "@assets/Generate_a_professional_high-en-0 (2)_1763434693372.jpg";
 import img1 from "@assets/Place_the_jewelry_on_a_linen_or-0 (3)_1763434693373.jpg";
 import img2 from "@assets/Place_the_jewelry_on_a_linen_or-0 (5)_1763434693373.jpg";
 import img3 from "@assets/Place_the_jewelry_on_a_linen_or-0 (13)_1763434693374.jpg";
@@ -51,12 +53,14 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
+      <FirstTimePopup />
       <Header cartItemCount={0} />
-      <Hero imageSrc={heroImage} />
+      <Hero imageSrc={heroImage} title="Handcrafted" subtitle="Pakistani-inspired artisan luxury with timeless heritage" />
       <FeaturedCategories categories={categories} />
       <BrandStory image={workshopImage} />
       <Testimonials testimonials={testimonials} />
       <InstagramFeed images={instagramImages} />
+      <Benefits />
       <Newsletter />
       <Footer />
     </div>

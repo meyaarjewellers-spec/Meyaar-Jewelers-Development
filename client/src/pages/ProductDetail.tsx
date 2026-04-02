@@ -24,6 +24,8 @@ export default function ProductDetail() {
     name: "Emerald Pearl Layered Necklace",
     price: 189,
     image: necklace1,
+    rating: 5,
+    reviewCount: 87,
     description: "An exquisite handcrafted necklace featuring luminous pearls and emerald green crystal beads in a sophisticated multi-strand design. Each bead is carefully selected and hand-strung to create this timeless piece.",
     isLimited: true,
     materials: "Freshwater pearls, emerald crystal beads, gold-plated chain and clasp",
@@ -32,9 +34,9 @@ export default function ProductDetail() {
   };
 
   const relatedProducts = [
-    { id: "2", name: "Green Beaded Necklace", price: 165, image: necklace2 },
-    { id: "3", name: "Crystal Hoop Earrings", price: 89, image: earring1 },
-    { id: "4", name: "Pearl Bracelet", price: 95, image: bracelet1 },
+    { id: "2", name: "Green Beaded Necklace", price: 165, image: necklace2, rating: 5, reviewCount: 62 },
+    { id: "3", name: "Crystal Hoop Earrings", price: 89, image: earring1, rating: 5, reviewCount: 54 },
+    { id: "4", name: "Pearl Bracelet", price: 95, image: bracelet1, rating: 5, reviewCount: 73 },
   ];
 
   const handleAddToCart = () => {
@@ -79,12 +81,24 @@ export default function ProductDetail() {
                 >
                   {mockProduct.name}
                 </h1>
-                <p 
-                  className="text-3xl font-serif text-foreground"
-                  data-testid="text-product-price"
-                >
-                  ${mockProduct.price}
-                </p>
+                <div className="flex items-center gap-3 mb-3">
+                  <p 
+                    className="text-3xl font-serif text-foreground"
+                    data-testid="text-product-price"
+                  >
+                    ${mockProduct.price}
+                  </p>
+                  {mockProduct.rating && (
+                    <div className="flex items-center gap-1">
+                      <div className="flex gap-0">
+                        {[...Array(5)].map((_, i) => (
+                          <span key={i} className="text-yellow-500 text-lg">★</span>
+                        ))}
+                      </div>
+                      <span className="text-sm text-muted-foreground">({mockProduct.reviewCount})</span>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <p 
@@ -177,7 +191,19 @@ export default function ProductDetail() {
                   </div>
                   <div className="p-4">
                     <h3 className="font-medium mb-1">{product.name}</h3>
-                    <p className="text-lg font-serif">${product.price}</p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-lg font-serif">${product.price}</p>
+                      {product.rating && (
+                        <div className="flex items-center gap-1">
+                          <div className="flex gap-0">
+                            {[...Array(5)].map((_, i) => (
+                              <span key={i} className="text-yellow-500 text-sm">★</span>
+                            ))}
+                          </div>
+                          <span className="text-xs text-muted-foreground">({product.reviewCount})</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </Card>
               ))}

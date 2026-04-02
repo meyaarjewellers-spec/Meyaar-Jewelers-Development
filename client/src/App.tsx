@@ -1,13 +1,16 @@
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { AuthProvider } from "./contexts/AuthContext";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import PromoBar from "@/components/PromoBar";
 import Home from "@/pages/Home";
 import CategoryPage from "@/pages/CategoryPage";
 import ProductDetail from "@/pages/ProductDetail";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
+import Checkout from "@/pages/Checkout";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -24,6 +27,7 @@ function Router() {
         {() => <CategoryPage category="earrings" />}
       </Route>
       <Route path="/product/:id" component={ProductDetail} />
+      <Route path="/checkout" component={Checkout} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route component={NotFound} />
@@ -34,10 +38,13 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <PromoBar />
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
