@@ -1,14 +1,18 @@
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Mail, Instagram, Facebook } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/contexts/CartContext";
 
 export default function Contact() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+  const { itemCount } = useCart();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -28,7 +32,7 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header cartItemCount={0} />
+      <Header cartItemCount={itemCount} />
       
       <main className="flex-1">
         <div className="bg-muted/30 py-16">
@@ -132,14 +136,19 @@ export default function Contact() {
                   Follow Us
                 </h3>
                 <div className="flex gap-3">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => console.log("Instagram clicked")}
-                    data-testid="button-instagram"
+                  <a
+                    href="https://www.instagram.com/meyaarjewellers/"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    <Instagram className="h-5 w-5" />
-                  </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      data-testid="button-instagram"
+                    >
+                      <Instagram className="h-5 w-5" />
+                    </Button>
+                  </a>
                   <Button
                     variant="outline"
                     size="icon"
@@ -171,8 +180,6 @@ export default function Contact() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

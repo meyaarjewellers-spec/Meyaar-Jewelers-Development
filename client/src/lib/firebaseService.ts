@@ -157,11 +157,10 @@ export async function createUserProfile(profile: UserProfile) {
     const docRef = doc(db, 'users', profile.uid);
     await updateDoc(docRef, {
       ...profile,
-      createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
     }).catch(() => {
       // If doc doesn't exist, create it
-      return addDoc(collection(db, 'users'), {
+      return updateDoc(doc(db, 'users', profile.uid), {
         ...profile,
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
@@ -169,7 +168,41 @@ export async function createUserProfile(profile: UserProfile) {
     });
   } catch (error) {
     console.error('Error creating user profile:', error);
-    throw error;
+    // Create a new document if it doesn't exist
+    try {
+      await updateDoc(doc(db, 'users', profile.uid), {
+        ...profile,
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+      });
+    } catch {
+      // Final fallback - just log it
+    }
+  }
+}
+
+export async function createOrUpdateUserProfile(profile: Partial<UserProfile> & { uid: string; email: string }) {
+  try {
+    const userRef = doc(db, 'users', profile.uid);
+    const userSnap = await getDoc(userRef);
+    
+    if (userSnap.exists()) {
+      // Update existing profile
+      await updateDoc(userRef, {
+        ...profile,
+        updatedAt: Timestamp.now(),
+      });
+    } else {
+      // Create new profile
+      await updateDoc(userRef, {
+        ...profile,
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+      });
+    }
+  } catch (error) {
+    console.error('Error creating/updating user profile:', error);
+    // Non-critical error, don't throw
   }
 }
 
@@ -182,6 +215,45 @@ export async function updateUserProfile(uid: string, updates: Partial<UserProfil
     });
   } catch (error) {
     console.error('Error updating user profile:', error);
+    throw error;
+  }
+}
+
+// ============ Guest Order Operations ============
+
+export interface GuestOrder extends Omit<Order, 'userId'> {
+  guestEmail: string;
+  guestName: string;
+  userId?: undefined;
+}
+
+export async function createGuestOrder(order: GuestOrder) {
+  try {
+    const docRef = await addDoc(collection(db, 'guest_orders'), {
+      ...order,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    });
+    return docRef.id;
+  } catch (error) {
+    console.error('Error creating guest order:', error);
+    throw error;
+  }
+}
+
+export async function getGuestOrder(orderId: string) {
+  try {
+    const docRef = doc(db, 'guest_orders', orderId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return {
+        id: docSnap.id,
+        ...docSnap.data(),
+      } as GuestOrder & { id: string };
+    }
+    return null;
+  } catch (error) {
+    console.error('Error fetching guest order:', error);
     throw error;
   }
 }

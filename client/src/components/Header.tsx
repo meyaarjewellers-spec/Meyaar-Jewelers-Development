@@ -3,7 +3,7 @@ import { ShoppingCart, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
-import brandLogo from "@assets/1 (1)_1763434109602.png";
+import { IMAGES } from "@/lib/imageConfig";
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -28,7 +28,7 @@ export default function Header({ cartItemCount = 0 }: HeaderProps) {
         <div className="flex h-16 items-center justify-between">
           <Link href="/" data-testid="link-home">
             <div className="flex items-center gap-2 hover-elevate cursor-pointer px-2 py-1 rounded-md">
-              <img src={brandLogo} alt="Meyaar Jewellers" className="h-10 w-auto" />
+              <img src={IMAGES.logoTransparent} alt="Meyaar Jewellers" className="h-10 w-auto" />
             </div>
           </Link>
 
@@ -56,13 +56,9 @@ export default function Header({ cartItemCount = 0 }: HeaderProps) {
               >
                 <ShoppingCart className="h-5 w-5" />
                 {cartItemCount > 0 && (
-                  <Badge
-                    variant="destructive"
-                    className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
-                    data-testid="badge-cart-count"
-                  >
+                  <span className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center text-xs font-semibold text-foreground">
                     {cartItemCount}
-                  </Badge>
+                  </span>
                 )}
               </Button>
             </Link>

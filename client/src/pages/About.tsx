@@ -1,19 +1,22 @@
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
-
-import workshopImage from "@assets/Generate_a_professional_high-en-0 (2)_1763434693372.jpg";
-import heroImage from "@assets/Generate_a_professional_high-en-0_1763434693372.jpg";
+import { useCart } from "@/contexts/CartContext";
+import { IMAGES } from "@/lib/imageConfig";
+import { useEffect } from "react";
 
 export default function About() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+  const { itemCount } = useCart();
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-amber-50">
-      <Header cartItemCount={0} />
+      <Header cartItemCount={itemCount} />
       
       <main className="flex-1">
         <div 
           className="relative h-[60vh] flex items-center justify-center overflow-hidden"
-          style={{ backgroundImage: `url(${heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+          style={{ backgroundImage: `url(${IMAGES.heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60" />
           <div className="relative z-10 text-center px-4">
@@ -34,7 +37,7 @@ export default function About() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <Card className="overflow-hidden aspect-square shadow-lg">
                 <img
-                  src={workshopImage}
+                  src={IMAGES.workshopImage}
                   alt="Artisan workshop"
                   className="w-full h-full object-cover"
                   data-testid="img-workshop"
@@ -133,8 +136,6 @@ export default function About() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

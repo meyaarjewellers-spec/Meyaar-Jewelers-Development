@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import brandLogo from "@assets/1 (1)_1763434109602.png";
+import { IMAGES } from "@/lib/imageConfig";
 import { Instagram, Facebook, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -9,11 +9,11 @@ export default function Footer() {
   return (
     <footer className="border-t bg-card">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
           <div>
-            <img src={brandLogo} alt="Meyaar Jewellers" className="h-12 mb-4" />
+            <img src={IMAGES.logoTransparent} alt="Meyaar Jewellers" className="h-16 mb-4" />
             <p className="text-sm text-muted-foreground">
-              Handcrafted artisan luxury jewelry, made with timeless craftsmanship since 2025.
+              Handcrafted artisan jewelry since 2025.
             </p>
           </div>
 
@@ -65,16 +65,55 @@ export default function Footer() {
           </div>
 
           <div>
+            <h3 className="font-medium mb-4" data-testid="text-footer-policies">Policies</h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="/privacy-policy">
+                  <span className="text-muted-foreground hover:text-foreground cursor-pointer" data-testid="link-footer-privacy">
+                    Privacy Policy
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms-conditions">
+                  <span className="text-muted-foreground hover:text-foreground cursor-pointer" data-testid="link-footer-terms">
+                    Terms & Conditions
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/return-policy">
+                  <span className="text-muted-foreground hover:text-foreground cursor-pointer" data-testid="link-footer-returns">
+                    Return Policy
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/shipping-policy">
+                  <span className="text-muted-foreground hover:text-foreground cursor-pointer" data-testid="link-footer-shipping">
+                    Shipping Policy
+                  </span>
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
             <h3 className="font-medium mb-4" data-testid="text-footer-connect">Connect</h3>
             <div className="flex gap-2">
-              <Button 
-                variant="ghost" 
-                size="icon"
-                onClick={() => console.log("Instagram clicked")}
-                data-testid="button-instagram"
+              <a
+                href="https://www.instagram.com/meyaarjewellers/"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <Instagram className="h-5 w-5" />
-              </Button>
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  data-testid="button-instagram"
+                >
+                  <Instagram className="h-5 w-5" />
+                </Button>
+              </a>
               <Button 
                 variant="ghost" 
                 size="icon"

@@ -1,13 +1,5 @@
 import { useState } from 'react';
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-  updateProfile,
-  User,
-} from 'firebase/auth';
-import { auth } from '@/lib/firebase';
-import { createUserProfile } from '@/lib/firebaseService';
+import { supabase, authAvailable } from '@/lib/supabase';
 
 export function useSignUp() {
   const [loading, setLoading] = useState(false);
@@ -22,26 +14,18 @@ export function useSignUp() {
     setError(null);
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
+      if (!authAvailable || !supabase) throw new Error('Supabase not available');
+      
+      const { data, error: signUpError } = await supabase.auth.signUp({
         email,
-        password
-      );
-      const user = userCredential.user;
-
-      // Update profile with display name
-      await updateProfile(user, {
-        displayName,
+        password,
+        options: {
+          data: { display_name: displayName },
+        },
       });
 
-      // Create user profile in Firestore
-      await createUserProfile({
-        uid: user.uid,
-        email: user.email || '',
-        displayName,
-      });
-
-      return user;
+      if (signUpError) throw signUpError;
+      return data.user;
     } catch (err: any) {
       const errorMessage = err.message || 'Failed to sign up';
       setError(errorMessage);
@@ -63,12 +47,15 @@ export function useSignIn() {
     setError(null);
 
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
+      if (!authAvailable || !supabase) throw new Error('Supabase not available');
+      
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email,
-        password
-      );
-      return userCredential.user;
+        password,
+      });
+
+      if (signInError) throw signInError;
+      return data.user;
     } catch (err: any) {
       const errorMessage = err.message || 'Failed to sign in';
       setError(errorMessage);
@@ -90,7 +77,10 @@ export function useForgotPassword() {
     setError(null);
 
     try {
-      await sendPasswordResetEmail(auth, email);
+      if (!authAvailable || !supabase) throw new Error('Supabase not available');
+      
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email);
+      if (resetError) throw resetError;
     } catch (err: any) {
       const errorMessage = err.message || 'Failed to send reset email';
       setError(errorMessage);

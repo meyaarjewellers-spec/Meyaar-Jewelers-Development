@@ -14,14 +14,32 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
-export const app = initializeApp(firebaseConfig);
+// Validate that all required config values are present
+const isConfigValid = !!(firebaseConfig.apiKey && firebaseConfig.projectId);
 
-// Initialize Firebase Authentication and get a reference to the service
-export const auth = getAuth(app);
+if (!isConfigValid) {
+  console.warn('⚠️ Firebase configuration incomplete. Check your .env.local file.');
+  console.warn('Missing:', {
+    apiKey: !firebaseConfig.apiKey ? 'VITE_FIREBASE_API_KEY' : 'OK',
+    projectId: !firebaseConfig.projectId ? 'VITE_FIREBASE_PROJECT_ID' : 'OK',
+  });
+  console.warn('📝 Update .env.local with valid Firebase credentials to use authentication features.');
+}
 
-// Initialize Cloud Firestore and get a reference to the service
-export const db = getFirestore(app);
+let app: any;
+let auth: any;
+let db: any;
+let storage: any;
 
-// Initialize Cloud Storage and get a reference to the service
-export const storage = getStorage(app);
+try {
+  // Initialize Firebase (wrapped in try-catch for graceful failure)
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+  storage = getStorage(app);
+} catch (error: any) {
+  console.warn('⚠️ Firebase initialization error:', error.message);
+  console.warn('The website will still work, but authentication and data storage features will be limited.');
+}
+
+export { app, auth, db, storage };

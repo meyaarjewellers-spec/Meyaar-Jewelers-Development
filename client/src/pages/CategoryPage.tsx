@@ -1,222 +1,122 @@
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import CategoryGrid from "@/components/CategoryGrid";
+import { useCart } from "@/contexts/CartContext";
+import { useCategoryData } from "@/components/category/useCategoryData";
+import { CategoryHeader } from "@/components/category/CategoryHeader";
+import { useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
 import type { Product } from "@/components/ProductCard";
-
-import necklace1 from "@assets/Place_the_jewelry_on_a_linen_or-0 (11)_1763434693374.jpg";
-import necklace2 from "@assets/Place_the_jewelry_on_a_linen_or-0 (15)_1763434693375.jpg";
-import earring1 from "@assets/Generate_a_professional_high-en-0 (3)_1763434693372.jpg";
-import earring2 from "@assets/Place_the_jewelry_on_a_linen_or-0 (5)_1763434693373.jpg";
-import earring3 from "@assets/Place_the_jewelry_on_a_linen_or-0 (6)_1763434693373.jpg";
-import earring4 from "@assets/Place_the_jewelry_on_a_linen_or-0 (7)_1763434693373.jpg";
-import earring5 from "@assets/Place_the_jewelry_on_a_linen_or-0 (1)_1763434693373.jpg";
-import earring6 from "@assets/Place_the_jewelry_on_a_linen_or-0 (14)_1763434693374.jpg";
-import earring7 from "@assets/Place_the_jewelry_on_a_linen_or-0 (4)_1763434693373.jpg";
-import earring8 from "@assets/Place_the_jewelry_on_a_linen_or-0 (16)_1763434693375.jpg";
-import earring9 from "@assets/Place_the_jewelry_on_a_linen_or-0 (17)_1763434693375.jpg";
-import bracelet1 from "@assets/Generate_a_professional_high-en-0 (2)_1763434693372.jpg";
-import bracelet2 from "@assets/Place_the_jewelry_on_a_linen_or-0 (2)_1763434693373.jpg";
-import bracelet3 from "@assets/Place_the_jewelry_on_a_linen_or-0 (8)_1763434693374.jpg";
-import bracelet4 from "@assets/Place_the_jewelry_on_a_linen_or-0 (9)_1763434693374.jpg";
 
 interface CategoryPageProps {
   category: "necklaces" | "bracelets" | "earrings";
 }
 
 export default function CategoryPage({ category }: CategoryPageProps) {
-  const categoryTitles = {
-    necklaces: "Necklaces",
-    bracelets: "Bracelets",
-    earrings: "Earrings",
-  };
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [category]);
+  
+  const { itemCount } = useCart();
+  const { title, description, products, loading } = useCategoryData(category);
 
-  const categoryDescriptions = {
-    necklaces: "Statement pieces that elevate any look. Each necklace is handcrafted with meticulous attention to detail.",
-    bracelets: "Elegant wrist adornments that complement your style. Handmade with care and precision.",
-    earrings: "From subtle to statement, our earrings add the perfect finishing touch. Limited edition designs.",
+  const handleQuickView = (product: Product) => {
+    setSelectedProduct(product);
   };
-
-  const mockProducts: Record<string, Product[]> = {
-    necklaces: [
-      {
-        id: "n1",
-        name: "Emerald Pearl Layered Necklace",
-        price: 189,
-        image: necklace1,
-        category: "necklaces",
-        isLimited: true,
-        rating: 5,
-        reviewCount: 140,
-      },
-      {
-        id: "n2",
-        name: "Green Beaded Multi-Strand Necklace",
-        price: 165,
-        image: necklace2,
-        category: "necklaces",
-        isLimited: true,
-        rating: 5,
-        reviewCount: 81,
-      },
-    ],
-    bracelets: [
-      {
-        id: "b1",
-        name: "Double Pearl Bracelet",
-        price: 95,
-        image: bracelet1,
-        category: "bracelets",
-        isLimited: true,
-        rating: 5,
-        reviewCount: 81,
-      },
-      {
-        id: "b2",
-        name: "Pearl Branch Bracelet",
-        price: 115,
-        image: bracelet2,
-        category: "bracelets",
-        rating: 5,
-        reviewCount: 65,
-      },
-      {
-        id: "b3",
-        name: "Pink & Pearl Statement Bracelet",
-        price: 135,
-        image: bracelet3,
-        category: "bracelets",
-        isLimited: true,
-        rating: 5,
-        reviewCount: 92,
-      },
-      {
-        id: "b4",
-        name: "Fuchsia Pearl Cluster Bracelet",
-        price: 125,
-        image: bracelet4,
-        category: "bracelets",
-        rating: 5,
-        reviewCount: 58,
-      },
-    ],
-    earrings: [
-      {
-        id: "e1",
-        name: "Crystal Beaded Hoop Earrings",
-        price: 89,
-        image: earring1,
-        category: "earrings",
-        isLimited: true,
-        rating: 5,
-        reviewCount: 73,
-      },
-      {
-        id: "e2",
-        name: "Turquoise Fan Earrings",
-        price: 145,
-        image: earring3,
-        category: "earrings",
-        isLimited: true,
-        rating: 5,
-        reviewCount: 54,
-      },
-      {
-        id: "e3",
-        name: "Aqua Pearl Fan Earrings",
-        price: 135,
-        image: earring4,
-        category: "earrings",
-        rating: 5,
-        reviewCount: 68,
-      },
-      {
-        id: "e4",
-        name: "Vintage Bronze Flower Earrings",
-        price: 78,
-        image: earring5,
-        category: "earrings",
-        rating: 5,
-        reviewCount: 47,
-      },
-      {
-        id: "e5",
-        name: "Pearl Cluster Chain Earrings",
-        price: 85,
-        image: earring2,
-        category: "earrings",
-        rating: 5,
-        reviewCount: 61,
-      },
-      {
-        id: "e6",
-        name: "Gold Geometric Pearl Earrings",
-        price: 125,
-        image: earring6,
-        category: "earrings",
-        isLimited: true,
-        rating: 5,
-        reviewCount: 85,
-      },
-      {
-        id: "e7",
-        name: "Pearl Chain Drop Earrings",
-        price: 95,
-        image: earring7,
-        category: "earrings",
-        rating: 5,
-        reviewCount: 52,
-      },
-      {
-        id: "e8",
-        name: "Pink Beaded Chain Earrings",
-        price: 75,
-        image: earring8,
-        category: "earrings",
-        rating: 5,
-        reviewCount: 43,
-      },
-      {
-        id: "e9",
-        name: "Blue Crystal Tassel Earrings",
-        price: 85,
-        image: earring9,
-        category: "earrings",
-        rating: 5,
-        reviewCount: 69,
-      },
-    ],
-  };
-
-  const products = mockProducts[category] || [];
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header cartItemCount={0} />
+      <Header cartItemCount={itemCount} />
       
       <main className="flex-1">
-        <div className="bg-muted/30 py-16">
-          <div className="container mx-auto px-4 text-center">
-            <h1 
-              className="font-serif text-4xl md:text-5xl font-bold mb-4"
-              data-testid="text-category-title"
-            >
-              {categoryTitles[category]}
-            </h1>
-            <p 
-              className="text-muted-foreground max-w-2xl mx-auto"
-              data-testid="text-category-description"
-            >
-              {categoryDescriptions[category]}
-            </p>
-          </div>
-        </div>
+        <CategoryHeader title={title} description={description} />
 
         <div className="container mx-auto px-4 py-12">
-          <CategoryGrid products={products} />
+          {loading ? (
+            <div className="text-center py-12">
+              <p className="text-gray-500">Loading products...</p>
+            </div>
+          ) : (
+            <CategoryGrid products={products as any} onQuickView={handleQuickView} />
+          )}
         </div>
       </main>
 
-      <Footer />
+      {/* Quick View Modal */}
+      <Dialog open={!!selectedProduct} onOpenChange={(open) => !open && setSelectedProduct(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{selectedProduct?.name || 'Product'}</DialogTitle>
+            <DialogDescription>
+              {selectedProduct?.category ? selectedProduct.category.charAt(0).toUpperCase() + selectedProduct.category.slice(1) : 'Jewelry'}
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedProduct && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Product Image */}
+              <div className="flex items-center justify-center bg-muted rounded-lg overflow-hidden">
+                <img
+                  src={selectedProduct.image}
+                  alt={selectedProduct.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              
+              {/* Product Details */}
+              <div className="flex flex-col justify-between">
+                <div>
+                  <h3 className="text-2xl font-serif font-bold mb-3">
+                    {selectedProduct.name}
+                  </h3>
+                  
+                  {/* Rating */}
+                  {selectedProduct.rating && selectedProduct.reviewCount !== undefined && (
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="flex gap-0.5">
+                        {[...Array(5)].map((_, i) => (
+                          <span key={i} className="text-yellow-500">★</span>
+                        ))}
+                      </div>
+                      <span className="text-sm text-muted-foreground">
+                        ({selectedProduct.reviewCount})
+                      </span>
+                    </div>
+                  )}
+                  
+                  <p className="text-3xl font-serif font-bold text-primary mb-4">
+                    ${selectedProduct.price}
+                  </p>
+                  
+                  {selectedProduct.isLimited && (
+                    <p className="text-sm font-semibold text-amber-600 mb-4">
+                      ✨ Limited Edition
+                    </p>
+                  )}
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex gap-3">
+                  <Link href={`/product/${selectedProduct.id}`} className="flex-1">
+                    <Button className="w-full bg-primary hover:bg-primary/90">
+                      View Full Details
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
