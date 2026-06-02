@@ -13,10 +13,22 @@ export default function Checkout() {
   const { items, removeItem, updateQuantity, itemCount } = useCart();
   const [calculatedTax, setCalculatedTax] = useState<number | null>(null);
   const [selectedShipping, setSelectedShipping] = useState<"free" | "standard" | "express" | null>(null);
+  const [showZipError, setShowZipError] = useState(false);
   
   const subtotal = items.reduce((sum: number, item) => sum + item.price * item.quantity, 0);
   const shippingCost = selectedShipping === "standard" ? 5.99 : selectedShipping === "express" ? 14.99 : 0;
   const total = subtotal + (calculatedTax || 0) + shippingCost;
+
+  const handleTaxCalculated = (tax: number | null) => {
+    setCalculatedTax(tax);
+    if (tax !== null) {
+      setShowZipError(false); // Clear error when tax is successfully calculated
+    }
+  };
+
+  const handleCheckout = () => {
+    setLocation("/checkout-method");
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -65,7 +77,7 @@ export default function Checkout() {
                   </div>
 
                   {/* Tax Section */}
-                  <TaxSection subtotal={subtotal} onTaxCalculated={setCalculatedTax} />
+                  <TaxSection subtotal={subtotal} onTaxCalculated={handleTaxCalculated} />
 
                   {/* Shipping Info */}
                   <div className="space-y-3 border-t pt-4">
@@ -110,7 +122,7 @@ export default function Checkout() {
                   {/* Checkout Button */}
                   <Button
                     className="w-full py-3 bg-amber-900 hover:bg-amber-800 text-white font-semibold flex justify-between"
-                    onClick={() => setLocation("/checkout-method")}
+                    onClick={handleCheckout}
                   >
                     <span className="w-4" />
                     <span className="flex-1 text-center">Checkout</span>

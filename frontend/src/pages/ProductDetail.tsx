@@ -12,8 +12,7 @@ import {
   SizeGuideButton, 
   CustomerReviews 
 } from "@/components/product";
-import { getProductWithImages, getProductsWithImages } from "@/lib/seedDatabase";
-import { supabase } from "@/lib/supabase";
+import { getProductWithImages, getProductsFromOtherCategories } from "@/lib/seedDatabase";
 
 export default function ProductDetail() {
   const [, params] = useRoute("/product/:id");
@@ -26,31 +25,35 @@ export default function ProductDetail() {
 
   useEffect(() => {
     const loadProduct = async () => {
+      if (!params?.id) return;
+      
       try {
-        // Optimized: Fetch only THIS product (2 queries instead of 16)
-        const currentProduct = await getProductWithImages(params?.id);
+        // Query 1: Fetch only THIS product (2 queries)
+        const currentProduct = await getProductWithImages(params.id);
 
         if (currentProduct) {
           setProduct(currentProduct);
           
-          // Get related products from same category (only fetch other products)
-          const allProducts = await getProductsWithImages();
-          const related = allProducts
-            .filter((p: any) => 
-              p.category?.id === currentProduct.category?.id && 
-              p.id !== currentProduct.id
-            )
-            .slice(0, 3)
-            .map((p: any) => ({
-              id: p.id,
-              name: p.name,
-              price: p.base_price,
-              image: (p.product_images?.[0]?.image_url || ''),
-              rating: 0,
-              reviewCount: 0,
-            }));
+          // Scroll to top when product loads
+          window.scrollTo({ top: 0, behavior: 'smooth' });
           
-          setRelatedProducts(related);
+          // Query 2: Fetch products from OTHER categories for "You May Also Like"
+          // Shows diverse products from different categories
+          if (currentProduct.category?.id) {
+            const otherCategoryProducts = await getProductsFromOtherCategories(currentProduct.category.id, 6);
+            const related = otherCategoryProducts
+              .slice(0, 3)
+              .map((p: any) => ({
+                id: p.id,
+                name: p.name,
+                price: p.base_price,
+                image: (p.product_images?.[0]?.image_url || ''),
+                rating: 0,
+                reviewCount: 0,
+              }));
+            
+            setRelatedProducts(related);
+          }
         }
         setLoading(false);
       } catch (error) {

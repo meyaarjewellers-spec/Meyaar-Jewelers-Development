@@ -1,208 +1,243 @@
 import { useLocation } from "wouter";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useGoogleCheckoutAuth } from "@/hooks/useGoogleCheckoutAuth";
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { CheckoutHeader } from "@/components/checkout/CheckoutHeader";
+import { AuthenticationOptions } from "@/components/checkout/AuthenticationOptions";
+import { PaymentMethodsSection } from "@/components/checkout/PaymentMethodsSection";
+import { WelcomeMessage } from "@/components/checkout/WelcomeMessage";
+import { LoadingState } from "@/components/checkout/LoadingState";
+import { ContinueShoppingButton } from "@/components/checkout/ContinueShoppingButton";
 
 export default function CheckoutMethod() {
   const [, setLocation] = useLocation();
-  const { items } = useCart();
+  const { items, clearCart } = useCart();
+  const { user, loading: authLoading } = useAuth();
+  const { handleGoogleAuth, isLoading: googleLoading, error: googleError } = useGoogleCheckoutAuth();
+  const [isGuestCheckout, setIsGuestCheckout] = useState(false);
+  const [guestShippingComplete, setGuestShippingComplete] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [paymentMessage, setPaymentMessage] = useState('');
+  const [orderId, setOrderId] = useState('');
 
   const subtotal = items.reduce((sum: number, item) => sum + item.price * item.quantity, 0);
+  
+  // Calculate tax (using 10% as example)
+  const tax = subtotal * 0.1;
+  const total = subtotal + tax;
 
+  // Extract first name from email or user metadata
+  const firstName = user?.user_metadata?.name?.split(' ')[0] || user?.email?.split('@')[0] || 'Guest';
+
+  // Handle guest checkout selection
+  const handleGuestCheckout = () => {
+    setIsGuestCheckout(true);
+    setGuestShippingComplete(true);
+  };
+
+  // Handle payment success
+  const handlePaymentSuccess = (paymentId: string) => {
+    setPaymentStatus('success');
+    setPaymentMessage(`Payment successful! Order ID: ${paymentId}`);
+    setOrderId(paymentId);
+    clearCart();
+    
+    // Redirect to confirmation page after 2 seconds
+    setTimeout(() => {
+      setLocation('/confirmation?' + new URLSearchParams({ orderId: paymentId }).toString());
+    }, 2000);
+  };
+
+  // Handle payment error
+  const handlePaymentError = (error: string) => {
+    setPaymentStatus('error');
+    setPaymentMessage(error);
+  };
+
+  // If loading, show loading state
+  if (authLoading) {
+    return <LoadingState />;
+  }
+
+  // If user is logged in, show welcome message and payment methods
+  if (user && !authLoading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <CheckoutHeader onBackClick={() => setLocation("/checkout")} />
+        <main className="container mx-auto px-4 py-12 max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+              <WelcomeMessage firstName={firstName} />
+              
+              {paymentStatus === 'success' && (
+                <Card className="border-2 border-green-500 bg-green-50">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl">✅</span>
+                      <div>
+                        <p className="text-green-900 font-semibold">{paymentMessage}</p>
+                        <p className="text-green-700 text-sm">Redirecting to confirmation page...</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {paymentStatus === 'error' && (
+                <Card className="border-2 border-red-500 bg-red-50">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl">❌</span>
+                      <div>
+                        <p className="text-red-900 font-semibold">Payment Failed</p>
+                        <p className="text-red-700 text-sm">{paymentMessage}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {paymentStatus === 'idle' && (
+                <PaymentMethodsSection
+                  totalAmount={total}
+                  onPaymentSuccess={handlePaymentSuccess}
+                  onPaymentError={handlePaymentError}
+                />
+              )}
+              
+              <ContinueShoppingButton />
+            </div>
+
+            {/* Order Total Sidebar - Right Side */}
+            <div className="lg:col-span-1">
+              <Card className="sticky top-4">
+                <CardHeader>
+                  <CardTitle className="text-lg">📋 Order Total</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Subtotal */}
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Subtotal</span>
+                    <span className="font-medium">${subtotal.toFixed(2)}</span>
+                  </div>
+
+                  {/* Tax */}
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Tax (10%)</span>
+                    <span className="font-medium">${tax.toFixed(2)}</span>
+                  </div>
+
+                  {/* Total */}
+                  <div className="border-t pt-2 flex justify-between text-lg font-bold">
+                    <span>Total</span>
+                    <span>${total.toFixed(2)}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // Not logged in - show checkout options
   return (
     <div className="min-h-screen bg-white">
-      {/* Simple Header */}
-      <div className="border-b">
-        <div className="container mx-auto px-4 py-6 flex items-center justify-between">
-          <button
-            onClick={() => setLocation("/checkout")}
-            className="text-2xl hover:opacity-70"
-          >
-            ←
-          </button>
-          <h1 className="text-3xl font-bold">Checkout</h1>
-          <div className="w-8" /> {/* Spacer for alignment */}
-        </div>
-      </div>
-
+      <CheckoutHeader onBackClick={isGuestCheckout ? () => setIsGuestCheckout(false) : undefined} />
       <main className="container mx-auto px-4 py-12 max-w-6xl">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content - Left Side */}
+          {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
-          {/* Checkout Methods */}
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold">👤 Choose Checkout Method</h2>
+            {/* Checkout Methods - Only show if not logged in */}
+            {!user && !authLoading && !isGuestCheckout && (
+              <AuthenticationOptions
+                onGoogleAuth={handleGoogleAuth}
+                googleLoading={googleLoading}
+                onGuestCheckout={handleGuestCheckout}
+              />
+            )}
 
-            {/* Guest Checkout */}
-            <Card
-              className="cursor-pointer hover:border-amber-900 hover:bg-amber-50 transition"
-              onClick={() => setLocation("/checkout?mode=guest")}
-            >
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <span className="text-2xl">🛒</span>
-                  Guest Checkout
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-gray-600">
-                <p>
-                  Quick checkout without creating an account. Perfect for
-                  one-time purchases.
-                </p>
-              </CardContent>
-            </Card>
+            {/* Payment Methods - Show if logged in or guest selected */}
+            {((user && !authLoading) || (isGuestCheckout && guestShippingComplete)) && (
+              <>
+                {isGuestCheckout && <h2 className="text-2xl font-bold" style={{ color: 'rgb(167, 98, 68)' }}>Hi, Guest!</h2>}
+                
+                {paymentStatus === 'success' && (
+                  <Card className="border-2 border-green-500 bg-green-50">
+                    <CardContent className="pt-6">
+                      <div className="flex items-center gap-3">
+                        <span className="text-3xl">✅</span>
+                        <div>
+                          <p className="text-green-900 font-semibold">{paymentMessage}</p>
+                          <p className="text-green-700 text-sm">Redirecting to confirmation page...</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
 
-            {/* Sign In */}
-            <Card
-              className="cursor-pointer hover:border-amber-900 hover:bg-amber-50 transition"
-              onClick={() => setLocation("/checkout?mode=signin")}
-            >
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <span className="text-2xl">🔐</span>
-                  Sign In to Your Account
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-gray-600">
-                <p>
-                  Sign in to your Meyaar account to save your information,
-                  track orders, and enjoy faster checkout next time.
-                </p>
-              </CardContent>
-            </Card>
+                {paymentStatus === 'error' && (
+                  <Card className="border-2 border-red-500 bg-red-50">
+                    <CardContent className="pt-6">
+                      <div className="flex items-center gap-3">
+                        <span className="text-3xl">❌</span>
+                        <div>
+                          <p className="text-red-900 font-semibold">Payment Failed</p>
+                          <p className="text-red-700 text-sm">{paymentMessage}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
 
-            {/* Sign Up */}
-            <Card
-              className="cursor-pointer hover:border-amber-900 hover:bg-amber-50 transition"
-              onClick={() => setLocation("/checkout?mode=signup")}
-            >
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <span className="text-2xl">✨</span>
-                  Create New Account
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-gray-600">
-                <p>
-                  Create an account to get exclusive benefits, early access to
-                  new collections, and personalized recommendations.
-                </p>
-              </CardContent>
-            </Card>
+                {paymentStatus === 'idle' && (
+                  <PaymentMethodsSection 
+                    totalAmount={total}
+                    onPaymentSuccess={handlePaymentSuccess}
+                    onPaymentError={handlePaymentError}
+                  />
+                )}
+                
+                <ContinueShoppingButton />
+              </>
+            )}
+            
+            {/* Continue Shopping - Only show for initial checkout options */}
+            {!user && !authLoading && !isGuestCheckout && <ContinueShoppingButton />}
           </div>
 
-          {/* Payment Methods */}
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold">💳 Payment Method</h2>
-
-            {/* Debit / Credit Card */}
-            <Card className="cursor-pointer hover:border-amber-900 hover:bg-amber-50 transition">
+          {/* Order Total Sidebar - Right Sixsde */}
+          <div className="lg:col-span-1">
+            <Card className="sticky top-4">
               <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <span className="text-2xl">💳</span>
-                  Debit or Credit Card
-                </CardTitle>
+                <CardTitle className="text-lg">📋 Order Total</CardTitle>
               </CardHeader>
-              <CardContent className="text-gray-600 space-y-4">
-                <p>Pay securely using your Visa, Mastercard, American Express, or Discover card.</p>
-                <div className="space-y-3">
-                  <input
-                    type="text"
-                    placeholder="Card Number"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-900"
-                  />
-                  <div className="grid grid-cols-2 gap-3">
-                    <input
-                      type="text"
-                      placeholder="MM/YY"
-                      className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-900"
-                    />
-                    <input
-                      type="text"
-                      placeholder="CVC"
-                      className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-900"
-                    />
-                  </div>
+              <CardContent className="space-y-4">
+                {/* Subtotal */}
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Subtotal</span>
+                  <span className="font-medium">${subtotal.toFixed(2)}</span>
+                </div>
+
+                {/* Tax */}
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Tax (10%)</span>
+                  <span className="font-medium">${tax.toFixed(2)}</span>
+                </div>
+
+                {/* Total */}
+                <div className="border-t pt-2 flex justify-between text-lg font-bold">
+                  <span>Total</span>
+                  <span>${total.toFixed(2)}</span>
                 </div>
               </CardContent>
             </Card>
-
-            {/* Apple Pay */}
-            <Card className="cursor-pointer hover:border-amber-900 hover:bg-amber-50 transition">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <span className="text-2xl">🍎</span>
-                  Apple Pay
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-gray-600">
-                <p>
-                  Fast and secure payment with Apple Pay. Pay with your saved cards and identity
-                  without entering your payment details.
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Google Pay */}
-            <Card className="cursor-pointer hover:border-amber-900 hover:bg-amber-50 transition">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <span className="text-2xl">🔵</span>
-                  Google Pay
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-gray-600">
-                <p>
-                  Quick checkout with Google Pay. Your payment information stays safe and secure.
-                </p>
-              </CardContent>
-            </Card>
           </div>
-        </div>
-
-        {/* Order Total Sidebar - Right Side */}
-        <div className="lg:col-span-1">
-          <Card className="sticky top-4">
-            <CardHeader>
-              <CardTitle className="text-lg">📋 Order Total</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {/* Subtotal */}
-              <div className="flex justify-between">
-                <span className="text-gray-600">Subtotal</span>
-                <span className="font-medium">${subtotal.toFixed(2)}</span>
-              </div>
-
-              {/* Total */}
-              <div className="border-t pt-2 flex justify-between text-lg font-bold">
-                <span>Total</span>
-                <span>${subtotal.toFixed(2)}</span>
-              </div>
-
-              {/* Checkout Button */}
-              <Button 
-                className="w-full py-6 bg-amber-900 hover:bg-amber-800 text-white text-lg font-semibold flex justify-between mt-4"
-              >
-                <span className="w-4" />
-                <span className="flex-1 text-center">Place Order</span>
-                <span>→</span>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-        </div>
-
-        {/* Continue Shopping Button */}
-        <div className="mt-8 max-w-2xl">
-          <Button
-            variant="outline"
-            className="w-full py-6 flex justify-between"
-            onClick={() => setLocation("/")}
-          >
-            <span>←</span>
-            <span className="flex-1 text-center">Continue Shopping</span>
-            <span className="w-4" />
-          </Button>
         </div>
       </main>
     </div>

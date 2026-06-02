@@ -12,19 +12,30 @@ interface ProductToCreate {
   gemstone_type?: string;
 }
 
-// Create admin client for seeding (bypasses RLS with service role key)
+// Singleton admin client - created once and reused everywhere
+let adminClient: any = null;
+
 function getAdminClient() {
+  // Return existing admin client if already created (singleton pattern)
+  if (adminClient) {
+    return adminClient;
+  }
+
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const serviceRoleKey = import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
   
   if (!supabaseUrl || !serviceRoleKey) {
     console.warn('⚠️ Service role key not available, using regular client');
-    return supabase;
+    adminClient = supabase;
+    return adminClient;
   }
   
-  return createClient(supabaseUrl, serviceRoleKey, {
+  // Create once and cache
+  adminClient = createClient(supabaseUrl, serviceRoleKey, {
     auth: { persistSession: false }
   });
+  
+  return adminClient;
 }
 
 /**
@@ -359,4 +370,70 @@ export async function getProductWithImages(productId: string) {
     category: Array.isArray(product.categories) ? product.categories[0] : product.categories,
     product_images: images || []
   };
+}
+
+/**
+ * Get products by category with images - OPTIMIZED
+ * Fetches only products from a specific category (great for related products)
+ * Uses single query instead of N+1
+ */
+export async function getProductsByCategory(categoryId: string, limit: number = 10) {
+  const adminClient = getAdminClient();
+  if (!adminClient) throw new Error('Supabase not initialized');
+
+  // Single query: Get all products from category with their images in one shot
+  const { data: productsData, error } = await adminClient
+    .from('products')
+    .select('*, categories(id, name, slug, description), product_images(*)')
+    .eq('category_id', categoryId)
+    .limit(limit);
+
+  if (error) {
+    console.error('Error fetching products by category:', error);
+    return [];
+  }
+
+  if (!productsData || productsData.length === 0) {
+    return [];
+  }
+
+  // Transform the data
+  return productsData.map((product: any) => ({
+    ...product,
+    category: Array.isArray(product.categories) ? product.categories[0] : product.categories,
+    product_images: product.product_images || []
+  }));
+}
+
+/**
+ * Get products from OTHER categories (excluding current category)
+ * Perfect for "You May Also Like" section showing diverse products
+ * Shows products from different categories than the current one
+ */
+export async function getProductsFromOtherCategories(excludeCategoryId: string, limit: number = 6) {
+  const adminClient = getAdminClient();
+  if (!adminClient) throw new Error('Supabase not initialized');
+
+  // Single query: Get all products NOT from current category
+  const { data: productsData, error } = await adminClient
+    .from('products')
+    .select('*, categories(id, name, slug, description), product_images(*)')
+    .neq('category_id', excludeCategoryId)
+    .limit(limit);
+
+  if (error) {
+    console.error('Error fetching products from other categories:', error);
+    return [];
+  }
+
+  if (!productsData || productsData.length === 0) {
+    return [];
+  }
+
+  // Transform and return
+  return productsData.map((product: any) => ({
+    ...product,
+    category: Array.isArray(product.categories) ? product.categories[0] : product.categories,
+    product_images: product.product_images || []
+  }));
 }

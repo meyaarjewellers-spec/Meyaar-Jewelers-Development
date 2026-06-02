@@ -1,9 +1,10 @@
 import { Link, useLocation } from "wouter";
-import { ShoppingCart, Menu, X } from "lucide-react";
+import { ShoppingCart, Menu, X, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { IMAGES } from "@/lib/imageConfig";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -12,6 +13,7 @@ interface HeaderProps {
 export default function Header({ cartItemCount = 0 }: HeaderProps) {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user } = useAuth();
 
   const navLinks = [
     { path: "/", label: "Home" },
@@ -47,6 +49,17 @@ export default function Header({ cartItemCount = 0 }: HeaderProps) {
           </nav>
 
           <div className="flex items-center gap-2">
+            {/* User Icon - Direct Navigation */}
+            <Link href={user ? "/settings" : "/authentication"} data-testid="link-user">
+              <Button
+                variant="ghost"
+                size="icon"
+                data-testid="button-user"
+              >
+                <User className="h-7 w-7" />
+              </Button>
+            </Link>
+
             <Link href="/checkout" data-testid="link-checkout">
               <Button
                 variant="ghost"

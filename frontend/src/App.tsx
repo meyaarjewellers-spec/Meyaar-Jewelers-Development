@@ -13,6 +13,9 @@ import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import Checkout from "@/pages/Checkout";
 import CheckoutMethod from "@/pages/CheckoutMethod";
+import Confirmation from "@/pages/Confirmation";
+import Authentication from "@/pages/Authentication";
+import Settings from "@/pages/Settings";
 import AdminSeed from "@/pages/AdminSeed";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsConditions from "@/pages/TermsConditions";
@@ -37,6 +40,9 @@ function Router() {
       <Route path="/product/:id" component={ProductDetail} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/checkout-method" component={CheckoutMethod} />
+      <Route path="/confirmation" component={Confirmation} />
+      <Route path="/authentication" component={Authentication} />
+      <Route path="/settings" component={Settings} />
       <Route path="/admin/seed" component={AdminSeed} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
@@ -52,7 +58,7 @@ function Router() {
 
 function App() {
   const [location] = useLocation();
-  const showFooter = location !== "/checkout" && location !== "/checkout-method";
+  const showFooter = location !== "/checkout" && location !== "/checkout-method" && location !== "/confirmation" && location !== "/authentication" && location !== "/settings";
 
   return (
     <QueryClientProvider client={queryClient}>
