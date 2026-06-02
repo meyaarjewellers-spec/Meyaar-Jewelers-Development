@@ -4,8 +4,12 @@ import { setupVite, serveStatic, log } from "./vite";
 // Importing env loads + validates server environment (and refuses to boot in
 // production if a secret is missing or exposed via a VITE_ prefix).
 import { env } from "./config/env";
+import { applySecurity } from "./middleware/security";
 
 const app = express();
+
+// Security headers + CORS allow-list, before any routes.
+applySecurity(app);
 
 declare module 'http' {
   interface IncomingMessage {
