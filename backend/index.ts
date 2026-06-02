@@ -1,13 +1,9 @@
 import express, { type Request, Response, NextFunction } from "express";
-import dotenv from "dotenv";
-import path from "path";
-import { fileURLToPath } from "url";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-
-// Load environment variables from .env.local if not already loaded
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.join(__dirname, "../.env.local") });
+// Importing env loads + validates server environment (and refuses to boot in
+// production if a secret is missing or exposed via a VITE_ prefix).
+import { env } from "./config/env";
 
 const app = express();
 
@@ -58,10 +54,14 @@ app.use((req, res, next) => {
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
-
-    res.status(status).json({ message });
-    throw err;
+    // Log full detail server-side; return a generic message to the client.
+    log(`error ${status}: ${err?.stack || err?.message || err}`, "express");
+    if (!res.headersSent) {
+      const message = status >= 500 ? "Internal Server Error" : err.message || "Request failed";
+      res.status(status).json({ error: { message } });
+    }
+    // Do NOT re-throw: the response is already handled; throwing here would
+    // crash the request lifecycle and risk an unhandled rejection.
   });
 
   // importantly only setup vite in development and after
@@ -77,7 +77,7 @@ app.use((req, res, next) => {
   // Other ports are firewalled. Default to 3000 if not specified.
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
-  const port = parseInt(process.env.PORT || '3000', 10);
+  const port = env.PORT;
   server.listen({
     port,
     host: "0.0.0.0",

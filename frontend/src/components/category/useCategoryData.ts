@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
 
 type Category = "necklaces" | "bracelets" | "earrings";
 
@@ -45,28 +45,6 @@ interface ProductData {
   product_images?: Array<{ image_url: string }>;
 }
 
-// Cache Supabase client globally
-let cachedAdminClient: any = null;
-
-// Get cached Supabase client
-function getAdminClient() {
-  if (cachedAdminClient) return cachedAdminClient;
-  
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const serviceRoleKey = import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
-  
-  if (!supabaseUrl || !serviceRoleKey) {
-    const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-    cachedAdminClient = createClient(supabaseUrl!, supabaseKey!);
-  } else {
-    cachedAdminClient = createClient(supabaseUrl, serviceRoleKey, {
-      auth: { persistSession: false }
-    });
-  }
-  
-  return cachedAdminClient;
-}
-
 export function useCategoryData(category: Category) {
   const [products, setProducts] = useState<ProductData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -77,11 +55,18 @@ export function useCategoryData(category: Category) {
     
     async function fetchCategoryProducts() {
       try {
-        const adminClient = getAdminClient();
+        if (!supabase) {
+          if (isMounted) {
+            setProducts([]);
+            setLoading(false);
+          }
+          return;
+        }
+        const client = supabase;
         const categoryName = CATEGORY_MAPPING[category];
 
         // Step 1: Get category ID by name
-        const { data: categoryData, error: categoryError } = await adminClient
+        const { data: categoryData, error: categoryError } = await client
           .from('categories')
           .select('id')
           .eq('name', categoryName)
@@ -99,7 +84,7 @@ export function useCategoryData(category: Category) {
         const categoryId = categoryData.id;
 
         // Step 2: Fetch products by category_id
-        const { data: productsData, error: productsError } = await adminClient
+        const { data: productsData, error: productsError } = await client
           .from('products')
           .select('id, name, base_price, description, sku')
           .eq('category_id', categoryId)
@@ -118,7 +103,7 @@ export function useCategoryData(category: Category) {
 
         // Step 3: Fetch all images for all products at once (batch query - single query)
         const productIds = productsData.map((p: any) => p.id);
-        const { data: allImages } = await adminClient
+        const { data: allImages } = await client
           .from('product_images')
           .select('product_id, image_url')
           .in('product_id', productIds);

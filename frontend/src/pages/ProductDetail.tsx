@@ -12,7 +12,7 @@ import {
   SizeGuideButton, 
   CustomerReviews 
 } from "@/components/product";
-import { getProductWithImages, getProductsFromOtherCategories } from "@/lib/seedDatabase";
+import { getProductWithImages, getProductsFromOtherCategories } from "@/lib/productCatalog";
 
 export default function ProductDetail() {
   const [, params] = useRoute("/product/:id");

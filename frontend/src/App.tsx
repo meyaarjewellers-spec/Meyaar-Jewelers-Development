@@ -16,12 +16,10 @@ import CheckoutMethod from "@/pages/CheckoutMethod";
 import Confirmation from "@/pages/Confirmation";
 import Authentication from "@/pages/Authentication";
 import Settings from "@/pages/Settings";
-import AdminSeed from "@/pages/AdminSeed";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsConditions from "@/pages/TermsConditions";
 import ReturnPolicy from "@/pages/ReturnPolicy";
 import ShippingPolicy from "@/pages/ShippingPolicy";
-import TodoList from "@/pages/TodoList";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -43,14 +41,12 @@ function Router() {
       <Route path="/confirmation" component={Confirmation} />
       <Route path="/authentication" component={Authentication} />
       <Route path="/settings" component={Settings} />
-      <Route path="/admin/seed" component={AdminSeed} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />
       <Route path="/terms-conditions" component={TermsConditions} />
       <Route path="/return-policy" component={ReturnPolicy} />
       <Route path="/shipping-policy" component={ShippingPolicy} />
-      <Route path="/todo" component={TodoList} />
       <Route component={NotFound} />
     </Switch>
   );

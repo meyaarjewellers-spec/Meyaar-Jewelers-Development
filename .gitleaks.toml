@@ -1,0 +1,29 @@
+# gitleaks configuration — secret scanning for Meyaar Jewellers.
+# Run manually:   gitleaks detect --no-banner
+# Pre-commit:     wired via .husky/pre-commit
+title = "Meyaar Jewellers gitleaks config"
+
+[extend]
+# Start from the maintained default rule set (Stripe, AWS, GCP, generic keys…).
+useDefault = true
+
+[allowlist]
+description = "Allow example/template files that intentionally contain placeholders"
+paths = [
+  '''\.env\..*\.example$''',
+  '''\.env\.server\.example$''',
+  '''frontend/\.env\.example$''',
+  '''README\.md$''',
+  '''docs/.*\.md$''',
+]
+# Placeholder tokens used in examples/docs must never trip the scanner.
+regexTarget = "match"
+regexes = [
+  '''sk_live_xxx''',
+  '''sk_test_xxx''',
+  '''pk_live_xxx''',
+  '''pk_test_xxx''',
+  '''whsec_xxx''',
+  '''\[PROJECT\]''',
+  '''\[PASSWORD\]''',
+]

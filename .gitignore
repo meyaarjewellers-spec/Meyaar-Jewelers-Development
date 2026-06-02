@@ -4,6 +4,19 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
-serviceAccountKey.json.env
+
+# --- Secrets: never commit ---
+# Service-account keys
 serviceAccountKey.json
-.env.local
+serviceAccountKey.json.env
+*.pem
+*.key
+
+# Environment files (all variants). Example files are allowed.
+.env
+.env.*
+!.env.*.example
+.env.server
+frontend/.env
+frontend/.env.*
+!frontend/.env.*.example
