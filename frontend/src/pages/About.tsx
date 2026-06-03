@@ -10,7 +10,7 @@ export default function About() {
   }, []);
   const { itemCount } = useCart();
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-amber-50">
+    <div className="min-h-screen flex flex-col bg-background">
       <Header cartItemCount={itemCount} />
       
       <main className="flex-1">
@@ -49,7 +49,7 @@ export default function About() {
                   className="font-serif text-4xl font-bold text-amber-900"
                   data-testid="text-section1-title"
                 >
-                  Heritage & Heritage
+                  Heritage & Craft
                 </h2>
                 <div className="h-1 w-16 bg-gradient-to-r from-amber-600 to-yellow-600"></div>
                 <p className="text-slate-700 leading-relaxed" data-testid="text-section1-p1">

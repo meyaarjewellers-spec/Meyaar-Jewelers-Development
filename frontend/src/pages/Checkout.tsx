@@ -1,149 +1,85 @@
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useLocation, Link } from "wouter";
+import { ShoppingBag, ShieldCheck, Truck } from "lucide-react";
 import Header from "@/components/Header";
-import { AlertTriangle } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
-import { useLocation } from "wouter";
-import { CartItemsList, TaxSection } from "@/components/checkout";
+import { CartItemsList } from "@/components/checkout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useState } from "react";
+
+const FREE_SHIPPING_THRESHOLD = 100;
 
 export default function Checkout() {
   const [, setLocation] = useLocation();
-  const { items, removeItem, updateQuantity, itemCount } = useCart();
-  const [calculatedTax, setCalculatedTax] = useState<number | null>(null);
-  const [selectedShipping, setSelectedShipping] = useState<"free" | "standard" | "express" | null>(null);
-  const [showZipError, setShowZipError] = useState(false);
-  
-  const subtotal = items.reduce((sum: number, item) => sum + item.price * item.quantity, 0);
-  const shippingCost = selectedShipping === "standard" ? 5.99 : selectedShipping === "express" ? 14.99 : 0;
-  const total = subtotal + (calculatedTax || 0) + shippingCost;
+  const { items, removeItem, updateQuantity, itemCount, total } = useCart();
 
-  const handleTaxCalculated = (tax: number | null) => {
-    setCalculatedTax(tax);
-    if (tax !== null) {
-      setShowZipError(false); // Clear error when tax is successfully calculated
-    }
-  };
-
-  const handleCheckout = () => {
-    setLocation("/checkout-method");
-  };
+  const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD - total);
+  const progress = Math.min(100, (total / FREE_SHIPPING_THRESHOLD) * 100);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="flex min-h-screen flex-col">
       <Header cartItemCount={itemCount} />
 
-      <div className="flex-1 container mx-auto px-4 py-8 max-w-6xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">🛒 Your Cart</h1>
-          <p className="text-gray-600">Review your items before checkout</p>
+      <main className="container mx-auto flex-1 px-4 py-12">
+        <div className="mb-10">
+          <h1 className="font-serif text-4xl">Your Bag</h1>
+          <p className="mt-2 text-muted-foreground">Review your pieces before checkout.</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Cart Items */}
-            {items.length > 0 && (
-              <CartItemsList
-                items={items}
-                onRemoveItem={removeItem}
-                onUpdateQuantity={updateQuantity}
-              />
-            )}
-
-            {!items.length && (
-              <Alert className="border-gray-300 bg-gray-50">
-                <AlertTriangle className="h-4 w-4 text-gray-600" />
-                <AlertDescription className="text-gray-800">
-                  Your cart is empty. <a href="/shop/necklaces" className="underline font-semibold">Continue shopping</a>
-                </AlertDescription>
-              </Alert>
-            )}
+        {items.length === 0 ? (
+          <div className="flex flex-col items-center justify-center gap-5 rounded-2xl border border-border bg-card py-24 text-center">
+            <ShoppingBag className="h-12 w-12 text-muted-foreground" strokeWidth={1.25} />
+            <p className="text-lg text-muted-foreground">Your bag is empty.</p>
+            <Link href="/shop/necklaces">
+              <Button className="rounded-full px-10">Start Shopping</Button>
+            </Link>
           </div>
-
-          {/* Order Total Sidebar */}
-          {items.length > 0 && (
-            <div className="lg:col-span-1">
-              <Card className="sticky top-4">
-                <CardHeader>
-                  <CardTitle className="text-lg">📋 Order Summary</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {/* Subtotal */}
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Subtotal</span>
-                    <span className="font-medium">${subtotal.toFixed(2)}</span>
-                  </div>
-
-                  {/* Tax Section */}
-                  <TaxSection subtotal={subtotal} onTaxCalculated={handleTaxCalculated} />
-
-                  {/* Shipping Info */}
-                  <div className="space-y-3 border-t pt-4">
-                    <h3 className="font-semibold text-gray-700">📦 Shipping Options</h3>
-                    {subtotal >= 75 ? (
-                      <div 
-                        onClick={() => setSelectedShipping("free")}
-                        className={`p-3 border rounded-md cursor-pointer transition ${selectedShipping === "free" ? "border-green-700 bg-green-50" : "border-green-500 bg-green-50"}`}
-                      >
-                        <div className="font-medium text-green-900">FREE Standard Shipping</div>
-                        <div className="text-green-700 text-xs">🎉 Free delivery on orders over $75!</div>
-                        <div className="text-green-900 font-semibold mt-1">5-7 business days</div>
-                      </div>
-                    ) : (
-                      <div className="space-y-2 text-sm">
-                        <div 
-                          onClick={() => setSelectedShipping("standard")}
-                          className={`p-3 border rounded-md hover:bg-gray-50 cursor-pointer transition ${selectedShipping === "standard" ? "border-amber-900 bg-amber-50" : ""}`}
-                        >
-                          <div className="font-medium text-gray-900">Standard Shipping</div>
-                          <div className="text-gray-600 text-xs">5-7 business days</div>
-                          <div className="text-amber-900 font-semibold mt-1">$5.99</div>
-                        </div>
-                        <div 
-                          onClick={() => setSelectedShipping("express")}
-                          className={`p-3 border rounded-md hover:bg-gray-50 cursor-pointer transition ${selectedShipping === "express" ? "border-amber-900 bg-amber-50" : ""}`}
-                        >
-                          <div className="font-medium text-gray-900">Express Shipping</div>
-                          <div className="text-gray-600 text-xs">2-3 business days</div>
-                          <div className="text-amber-900 font-semibold mt-1">$14.99</div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Total */}
-                  <div className="border-t pt-4 flex justify-between text-lg font-bold">
-                    <span>Total</span>
-                    <span>${total.toFixed(2)}</span>
-                  </div>
-
-                  {/* Checkout Button */}
-                  <Button
-                    className="w-full py-3 bg-amber-900 hover:bg-amber-800 text-white font-semibold flex justify-between"
-                    onClick={handleCheckout}
-                  >
-                    <span className="w-4" />
-                    <span className="flex-1 text-center">Checkout</span>
-                    <span>→</span>
-                  </Button>
-
-                  {/* Continue Shopping Button */}
-                  <Button
-                    className="w-full py-3 bg-amber-900 hover:bg-amber-800 text-white font-semibold flex justify-between"
-                    onClick={() => setLocation("/")}
-                  >
-                    <span>←</span>
-                    <span className="flex-1 text-center">Continue Shopping</span>
-                    <span className="w-4" />
-                  </Button>
-                </CardContent>
-              </Card>
+        ) : (
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <CartItemsList items={items} onRemoveItem={removeItem} onUpdateQuantity={updateQuantity} />
             </div>
-          )}
-        </div>
-      </div>
+
+            <aside className="lg:col-span-1">
+              <div className="sticky top-28 rounded-2xl border border-border bg-card p-6">
+                <h2 className="font-serif text-xl">Order Summary</h2>
+
+                <div className="mt-5 space-y-3 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Subtotal ({itemCount} items)</span>
+                    <span className="font-medium">${total.toFixed(2)}</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">Shipping &amp; taxes calculated at checkout.</p>
+                </div>
+
+                {/* Free shipping progress */}
+                <div className="mt-5 rounded-xl bg-muted/50 p-4">
+                  {remaining > 0 ? (
+                    <p className="text-xs text-muted-foreground">
+                      Add <span className="font-semibold text-foreground">${remaining.toFixed(2)}</span> for free shipping
+                    </p>
+                  ) : (
+                    <p className="text-xs font-medium text-primary">🎉 You've unlocked free shipping!</p>
+                  )}
+                  <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-background">
+                    <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${progress}%` }} />
+                  </div>
+                </div>
+
+                <Button className="mt-6 w-full rounded-full py-6" onClick={() => setLocation("/checkout-method")}>
+                  Proceed to Checkout
+                </Button>
+                <Button variant="ghost" className="mt-2 w-full" onClick={() => setLocation("/")}>
+                  Continue Shopping
+                </Button>
+
+                <div className="mt-6 space-y-2 border-t border-border pt-4 text-xs text-muted-foreground">
+                  <p className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Secure checkout by Stripe</p>
+                  <p className="flex items-center gap-2"><Truck className="h-4 w-4 text-primary" /> Free shipping over ${FREE_SHIPPING_THRESHOLD}</p>
+                </div>
+              </div>
+            </aside>
+          </div>
+        )}
+      </main>
     </div>
   );
 }

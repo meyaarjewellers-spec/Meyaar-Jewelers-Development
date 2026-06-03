@@ -1,9 +1,9 @@
 import { Link, useLocation } from "wouter";
-import { ShoppingCart, Menu, X, User, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Menu, X, User, Search } from "lucide-react";
 import { useState } from "react";
 import { IMAGES } from "@/lib/imageConfig";
 import { useAuth } from "@/contexts/AuthContext";
+import CartDrawer from "@/components/CartDrawer";
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -81,14 +81,7 @@ export default function Header({ cartItemCount = 0 }: HeaderProps) {
             <Link href={user ? "/settings" : "/authentication"} data-testid="link-user" className="p-2 text-foreground/80 transition-colors hover:text-primary">
               <User className="h-5 w-5" />
             </Link>
-            <Link href="/checkout" data-testid="link-checkout" className="relative p-2 text-foreground/80 transition-colors hover:text-primary">
-              <ShoppingCart className="h-5 w-5" />
-              {cartItemCount > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 grid h-4 w-4 place-items-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
-                  {cartItemCount}
-                </span>
-              )}
-            </Link>
+            <CartDrawer />
           </div>
         </div>
 

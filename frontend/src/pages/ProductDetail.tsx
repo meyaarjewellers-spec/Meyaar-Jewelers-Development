@@ -127,6 +127,7 @@ export default function ProductDetail() {
             <ImageZoomViewer
               src={primaryImage}
               alt={product.name}
+              images={(product.product_images || []).map((img: any) => img.image_url).filter(Boolean)}
             />
 
             <div className="space-y-6">

@@ -1,21 +1,30 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { AlertCircle } from "lucide-react";
+import { Link } from "wouter";
+import Header from "@/components/Header";
+import { Button } from "@/components/ui/button";
+import { useCart } from "@/contexts/CartContext";
 
 export default function NotFound() {
+  const { itemCount } = useCart();
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
-      <Card className="w-full max-w-md mx-4">
-        <CardContent className="pt-6">
-          <div className="flex mb-4 gap-2">
-            <AlertCircle className="h-8 w-8 text-red-500" />
-            <h1 className="text-2xl font-bold text-gray-900">404 Page Not Found</h1>
-          </div>
-
-          <p className="mt-4 text-sm text-gray-600">
-            Did you forget to add the page to the router?
+    <div className="flex min-h-screen flex-col">
+      <Header cartItemCount={itemCount} />
+      <main className="flex flex-1 items-center justify-center px-4 py-24 text-center">
+        <div className="max-w-md">
+          <p className="font-serif text-7xl text-primary md:text-8xl">404</p>
+          <h1 className="mt-4 font-serif text-2xl md:text-3xl">This page has slipped away</h1>
+          <p className="mt-3 text-muted-foreground">
+            The piece you're looking for may have moved or sold out. Let's find you something beautiful.
           </p>
-        </CardContent>
-      </Card>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link href="/">
+              <Button className="rounded-full px-8">Back to Home</Button>
+            </Link>
+            <Link href="/shop/necklaces">
+              <Button variant="outline" className="rounded-full px-8">Shop the Collection</Button>
+            </Link>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
