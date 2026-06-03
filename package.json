@@ -8,7 +8,13 @@
     "build": "cd frontend && npm run build",
     "start": "cd frontend && npm run start",
     "check": "cd frontend && tsc",
+    "check:backend": "tsc -p backend/tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:generate": "drizzle-kit generate --config=backend/drizzle.config.ts",
     "db:push": "drizzle-kit --config backend/drizzle.config.ts push",
+    "verify:no-secrets": "bash scripts/verify-no-secrets.sh",
+    "env:check": "tsx backend/config/env.ts --check",
     "upload:images": "node backend/scripts/uploadImages.js"
   },
   "dependencies": {
@@ -108,7 +114,8 @@
     "tailwindcss": "^3.4.17",
     "tsx": "^4.20.5",
     "typescript": "5.6.3",
-    "vite": "^5.4.20"
+    "vite": "^5.4.20",
+    "vitest": "^4.1.8"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"

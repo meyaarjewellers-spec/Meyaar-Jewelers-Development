@@ -1,7 +1,5 @@
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
+import { Heart } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { StarRating } from "@/components/shared";
@@ -34,81 +32,78 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
       price: product.price,
       image: product.image,
       category: product.category,
-
     });
-    toast({
-      title: "Added to cart",
-      description: `${product.name} has been added to your bag`,
-    });
+    toast({ title: "Added to bag", description: `${product.name} is in your bag.` });
   };
+
   return (
-    <Card 
-      className="group overflow-hidden border hover-elevate cursor-pointer"
-      data-testid={`card-product-${product.id}`}
-    >
+    <div className="group relative" data-testid={`card-product-${product.id}`}>
       <Link href={`/product/${product.id}`}>
-        <div className="relative aspect-square overflow-hidden bg-muted">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-            data-testid={`img-product-${product.id}`}
-          />
-          {product.isLimited && (
-            <Badge 
-              className="absolute top-2 right-2 bg-primary text-primary-foreground"
-              data-testid={`badge-limited-${product.id}`}
-            >
-              Limited Edition
-            </Badge>
+        <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-[hsl(35_30%_92%)]">
+          {product.image ? (
+            <img
+              src={product.image}
+              alt={product.name}
+              loading="lazy"
+              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+              data-testid={`img-product-${product.id}`}
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center text-muted-foreground font-serif italic">
+              Meyaar
+            </div>
           )}
-          
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-            <Button
-              variant="outline"
-              size="sm"
-              className="bg-white/90 backdrop-blur-sm hover:bg-white"
-              onClick={(e) => {
-                e.preventDefault();
-                onQuickView?.(product);
-                console.log("Quick view:", product.name);
-              }}
-              data-testid={`button-quick-view-${product.id}`}
+
+          {/* Limited badge */}
+          {product.isLimited && (
+            <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-primary backdrop-blur">
+              Limited
+            </span>
+          )}
+
+          {/* Wishlist */}
+          <button
+            type="button"
+            aria-label="Add to wishlist"
+            onClick={(e) => e.preventDefault()}
+            className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-white/80 text-foreground/70 opacity-0 backdrop-blur transition-all duration-300 hover:text-primary group-hover:opacity-100"
+          >
+            <Heart className="h-4 w-4" />
+          </button>
+
+          {/* Quick add bar (slides up on hover; tappable on mobile) */}
+          <div className="absolute inset-x-3 bottom-3 translate-y-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 max-md:translate-y-0 max-md:opacity-100">
+            <button
+              onClick={handleAddToBag}
+              className="w-full rounded-full bg-foreground/90 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] text-white backdrop-blur transition-colors hover:bg-primary"
+              data-testid={`button-add-${product.id}`}
             >
-              Quick View
-            </Button>
+              Add to Bag
+            </button>
           </div>
         </div>
       </Link>
 
-      <div className="p-4">
+      <div className="pt-4 text-center">
         <Link href={`/product/${product.id}`}>
-          <h3 
-            className="font-medium text-base mb-2 text-foreground hover:text-primary transition-colors"
+          <h3
+            className="font-serif text-lg leading-snug text-foreground transition-colors group-hover:text-primary"
             data-testid={`text-product-name-${product.id}`}
           >
             {product.name}
           </h3>
         </Link>
-        
-        {/* Star Rating */}
-        {product.rating && product.reviewCount !== undefined && (
-          <div className="mb-2">
+
+        {product.rating !== undefined && product.reviewCount !== undefined && product.reviewCount > 0 && (
+          <div className="mt-1.5 flex justify-center">
             <StarRating rating={product.rating} reviewCount={product.reviewCount} size="sm" />
           </div>
         )}
-        
-        <p className="text-lg font-serif text-foreground"data-testid={`text-product-price-${product.id}`}>
-          ${product.price}
+
+        <p className="mt-2 text-sm tracking-wide text-foreground/80" data-testid={`text-product-price-${product.id}`}>
+          ${product.price.toFixed(2)}
         </p>
-        
-        <Button
-          onClick={handleAddToBag}
-          className="w-full mt-3 bg-amber-900 hover:bg-amber-800 text-white font-semibold"
-        >
-          Add to Bag
-        </Button>
       </div>
-    </Card>
+    </div>
   );
 }

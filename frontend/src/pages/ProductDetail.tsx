@@ -1,16 +1,17 @@
-import { useRoute } from "wouter";
+import { useRoute, Link } from "wouter";
 import { useState, useEffect } from "react";
+import { Truck, ShieldCheck, RefreshCcw } from "lucide-react";
 import Header from "@/components/Header";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
-import { 
-  ImageZoomViewer, 
-  ProductHeader, 
-  ProductDetails, 
-  QuantitySelector, 
-  RelatedProducts, 
-  SizeGuideButton, 
-  CustomerReviews 
+import {
+  ImageZoomViewer,
+  ProductHeader,
+  ProductDetails,
+  QuantitySelector,
+  RelatedProducts,
+  SizeGuideButton,
+  CustomerReviews
 } from "@/components/product";
 import { getProductWithImages, getProductsFromOtherCategories } from "@/lib/productCatalog";
 
@@ -96,7 +97,7 @@ export default function ProductDetail() {
     addItem({
       id: product.id,
       name: product.name,
-      price: product.base_price,
+      price: Number(product.discount_price ?? product.base_price),
       image: primaryImage,
       category: categoryName,
     });
@@ -112,9 +113,18 @@ export default function ProductDetail() {
       <Header cartItemCount={itemCount} />
       
       <main className="flex-1">
-        <div className="container mx-auto px-4 py-12">
+        <div className="container mx-auto px-4 py-10">
+          {/* Breadcrumb */}
+          <nav className="mb-8 text-xs uppercase tracking-[0.15em] text-muted-foreground">
+            <Link href="/" className="hover:text-primary">Home</Link>
+            <span className="mx-2">/</span>
+            <Link href={`/shop/${categoryName}`} className="capitalize hover:text-primary">{categoryName}</Link>
+            <span className="mx-2">/</span>
+            <span className="text-foreground">{product.name}</span>
+          </nav>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
-            <ImageZoomViewer 
+            <ImageZoomViewer
               src={primaryImage}
               alt={product.name}
             />
@@ -123,14 +133,14 @@ export default function ProductDetail() {
               <ProductHeader product={{
                 id: product.id,
                 name: product.name,
-                price: product.base_price,
-                rating: 5,
-                reviewCount: Math.floor(Math.random() * 100) + 30,
-                isLimited: false,
+                price: Number(product.discount_price ?? product.base_price),
+                rating: product.average_rating ? Number(product.average_rating) : 0,
+                reviewCount: product.total_reviews ?? 0,
+                isLimited: Boolean(product.is_featured),
               }} />
 
-              <p 
-                className="text-muted-foreground"
+              <p
+                className="leading-relaxed text-muted-foreground"
                 data-testid="text-product-description"
               >
                 {product.description}
@@ -143,6 +153,20 @@ export default function ProductDetail() {
                   onAddToCart={handleAddToCart}
                 />
                 <SizeGuideButton category={categoryName} />
+              </div>
+
+              {/* Trust row */}
+              <div className="grid grid-cols-3 gap-3 rounded-xl border border-border bg-card p-4 text-center">
+                {[
+                  { icon: Truck, label: "Free shipping over $100" },
+                  { icon: ShieldCheck, label: "Secure checkout" },
+                  { icon: RefreshCcw, label: "30-day returns" },
+                ].map(({ icon: Icon, label }) => (
+                  <div key={label} className="flex flex-col items-center gap-1.5">
+                    <Icon className="h-5 w-5 text-primary" strokeWidth={1.5} />
+                    <span className="text-[11px] leading-tight text-muted-foreground">{label}</span>
+                  </div>
+                ))}
               </div>
 
               <ProductDetails

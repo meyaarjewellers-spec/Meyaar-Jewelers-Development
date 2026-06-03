@@ -9,6 +9,7 @@ import { PromoBar, Footer } from "@/components/home";
 import Home from "@/pages/Home";
 import CategoryPage from "@/pages/CategoryPage";
 import ProductDetail from "@/pages/ProductDetail";
+import SearchPage from "@/pages/Search";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import Checkout from "@/pages/Checkout";
@@ -36,6 +37,7 @@ function Router() {
         {() => <CategoryPage category="earrings" />}
       </Route>
       <Route path="/product/:id" component={ProductDetail} />
+      <Route path="/search" component={SearchPage} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/checkout-method" component={CheckoutMethod} />
       <Route path="/confirmation" component={Confirmation} />

@@ -1,5 +1,8 @@
 # Tasks — Priority 1: Launch-Blocker Remediation
 
+> **Status (2026-06-02):** Groups 1–6 **code-complete and locally verified** (frontend+backend typecheck, 23 unit tests, production bundle has zero secrets, server live). Owner-gated items remain: secret rotation, `DATABASE_URL` + applying migrations/RLS to Supabase, Stripe webhook + Apple Pay domain verification, shipping numbers, git-history scrub. Full handoff: [docs/audit/PRIORITY-1-HANDOFF.md](../../../docs/audit/PRIORITY-1-HANDOFF.md). R1 review checkpoint passes once the owner steps + e2e in Stripe test mode are done.
+
+
 Parallel groups run sequentially; tasks within a group run concurrently and never write the same file. Each task: `[role] verb what | files | acceptance. Run: <cmd>`. Reviews gate progression.
 
 Legend: roles `[coding] [devops]`; reviews by `review-agent` (+`sa-agent` for infra). Effort S/M/L.

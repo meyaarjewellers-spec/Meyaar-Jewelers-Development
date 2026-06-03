@@ -23,11 +23,9 @@ export default function CheckoutMethod() {
   const [paymentMessage, setPaymentMessage] = useState('');
   const [orderId, setOrderId] = useState('');
 
+  // Display-only estimate. The authoritative subtotal/discount/shipping/tax/total
+  // are computed by the server and shown inside the Payment Element step.
   const subtotal = items.reduce((sum: number, item) => sum + item.price * item.quantity, 0);
-  
-  // Calculate tax (using 10% as example)
-  const tax = subtotal * 0.1;
-  const total = subtotal + tax;
 
   // Extract first name from email or user metadata
   const firstName = user?.user_metadata?.name?.split(' ')[0] || user?.email?.split('@')[0] || 'Guest';
@@ -38,16 +36,16 @@ export default function CheckoutMethod() {
     setGuestShippingComplete(true);
   };
 
-  // Handle payment success
-  const handlePaymentSuccess = (paymentId: string) => {
+  // Handle payment success — receives the server-created order.
+  const handlePaymentSuccess = (info: { orderNumber: string; orderId: string }) => {
     setPaymentStatus('success');
-    setPaymentMessage(`Payment successful! Order ID: ${paymentId}`);
-    setOrderId(paymentId);
+    setPaymentMessage(`Payment successful! Order ${info.orderNumber}`);
+    setOrderId(info.orderNumber);
     clearCart();
-    
+
     // Redirect to confirmation page after 2 seconds
     setTimeout(() => {
-      setLocation('/confirmation?' + new URLSearchParams({ orderId: paymentId }).toString());
+      setLocation('/confirmation?' + new URLSearchParams({ orderId: info.orderNumber }).toString());
     }, 2000);
   };
 
@@ -103,7 +101,6 @@ export default function CheckoutMethod() {
 
               {paymentStatus === 'idle' && (
                 <PaymentMethodsSection
-                  totalAmount={total}
                   onPaymentSuccess={handlePaymentSuccess}
                   onPaymentError={handlePaymentError}
                 />
@@ -125,16 +122,16 @@ export default function CheckoutMethod() {
                     <span className="font-medium">${subtotal.toFixed(2)}</span>
                   </div>
 
-                  {/* Tax */}
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Tax (10%)</span>
-                    <span className="font-medium">${tax.toFixed(2)}</span>
+                  {/* Shipping, discount and tax are calculated by the server
+                      and shown on the secure payment step. */}
+                  <div className="text-xs text-gray-500">
+                    Shipping &amp; tax calculated at payment.
                   </div>
 
-                  {/* Total */}
+                  {/* Estimated total (server confirms the final amount) */}
                   <div className="border-t pt-2 flex justify-between text-lg font-bold">
-                    <span>Total</span>
-                    <span>${total.toFixed(2)}</span>
+                    <span>Estimated total</span>
+                    <span>${subtotal.toFixed(2)}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -197,7 +194,6 @@ export default function CheckoutMethod() {
 
                 {paymentStatus === 'idle' && (
                   <PaymentMethodsSection 
-                    totalAmount={total}
                     onPaymentSuccess={handlePaymentSuccess}
                     onPaymentError={handlePaymentError}
                   />
@@ -224,16 +220,16 @@ export default function CheckoutMethod() {
                   <span className="font-medium">${subtotal.toFixed(2)}</span>
                 </div>
 
-                {/* Tax */}
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Tax (10%)</span>
-                  <span className="font-medium">${tax.toFixed(2)}</span>
+                {/* Shipping, discount and tax are calculated by the server
+                    and shown on the secure payment step. */}
+                <div className="text-xs text-gray-500">
+                  Shipping &amp; tax calculated at payment.
                 </div>
 
-                {/* Total */}
+                {/* Estimated total (server confirms the final amount) */}
                 <div className="border-t pt-2 flex justify-between text-lg font-bold">
-                  <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>Estimated total</span>
+                  <span>${subtotal.toFixed(2)}</span>
                 </div>
               </CardContent>
             </Card>

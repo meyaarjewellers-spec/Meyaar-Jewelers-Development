@@ -1,143 +1,79 @@
 import { Link } from "wouter";
 import { IMAGES } from "@/lib/imageConfig";
 import { Instagram, Facebook, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
+const columns = [
+  {
+    title: "Shop",
+    links: [
+      { label: "Necklaces", href: "/shop/necklaces" },
+      { label: "Bracelets", href: "/shop/bracelets" },
+      { label: "Earrings", href: "/shop/earrings" },
+    ],
+  },
+  {
+    title: "About",
+    links: [
+      { label: "Our Story", href: "/about" },
+      { label: "Contact Us", href: "/contact" },
+    ],
+  },
+  {
+    title: "Policies",
+    links: [
+      { label: "Privacy Policy", href: "/privacy-policy" },
+      { label: "Terms & Conditions", href: "/terms-conditions" },
+      { label: "Return Policy", href: "/return-policy" },
+      { label: "Shipping Policy", href: "/shipping-policy" },
+    ],
+  },
+];
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t bg-card">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
-          <div>
-            <img src={IMAGES.logoTransparent} alt="Meyaar Jewellers" className="h-16 mb-4" />
-            <p className="text-sm text-muted-foreground">
-              Handcrafted artisan jewelry since 2025.
+    <footer className="border-t border-border bg-card">
+      <div className="container mx-auto px-4 py-16">
+        <div className="grid grid-cols-2 gap-10 md:grid-cols-5">
+          <div className="col-span-2">
+            <img src={IMAGES.logoTransparent} alt="Meyaar Jewellers" className="mb-4 h-14" />
+            <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
+              Handcrafted, limited-edition jewelry — Pakistani-inspired heritage,
+              made in small batches since 2025.
             </p>
-          </div>
-
-          <div>
-            <h3 className="font-medium mb-4" data-testid="text-footer-shop">Shop</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/shop/necklaces">
-                  <span className="text-muted-foreground hover:text-foreground cursor-pointer" data-testid="link-footer-necklaces">
-                    Necklaces
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/shop/bracelets">
-                  <span className="text-muted-foreground hover:text-foreground cursor-pointer" data-testid="link-footer-bracelets">
-                    Bracelets
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/shop/earrings">
-                  <span className="text-muted-foreground hover:text-foreground cursor-pointer" data-testid="link-footer-earrings">
-                    Earrings
-                  </span>
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-medium mb-4" data-testid="text-footer-about">About</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/about">
-                  <span className="text-muted-foreground hover:text-foreground cursor-pointer" data-testid="link-footer-about">
-                    Our Story
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact">
-                  <span className="text-muted-foreground hover:text-foreground cursor-pointer" data-testid="link-footer-contact">
-                    Contact Us
-                  </span>
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-medium mb-4" data-testid="text-footer-policies">Policies</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/privacy-policy">
-                  <span className="text-muted-foreground hover:text-foreground cursor-pointer" data-testid="link-footer-privacy">
-                    Privacy Policy
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms-conditions">
-                  <span className="text-muted-foreground hover:text-foreground cursor-pointer" data-testid="link-footer-terms">
-                    Terms & Conditions
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/return-policy">
-                  <span className="text-muted-foreground hover:text-foreground cursor-pointer" data-testid="link-footer-returns">
-                    Return Policy
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/shipping-policy">
-                  <span className="text-muted-foreground hover:text-foreground cursor-pointer" data-testid="link-footer-shipping">
-                    Shipping Policy
-                  </span>
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-medium mb-4" data-testid="text-footer-connect">Connect</h3>
-            <div className="flex gap-2">
-              <a
-                href="https://www.instagram.com/meyaarjewellers/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  data-testid="button-instagram"
-                >
-                  <Instagram className="h-5 w-5" />
-                </Button>
+            <div className="mt-5 flex gap-2">
+              <a href="https://www.instagram.com/meyaarjewellers/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid h-10 w-10 place-items-center rounded-full border border-border text-foreground/70 transition-colors hover:border-primary hover:text-primary">
+                <Instagram className="h-4 w-4" />
               </a>
-              <Button 
-                variant="ghost" 
-                size="icon"
-                onClick={() => console.log("Facebook clicked")}
-                data-testid="button-facebook"
-              >
-                <Facebook className="h-5 w-5" />
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="icon"
-                onClick={() => console.log("Email clicked")}
-                data-testid="button-email"
-              >
-                <Mail className="h-5 w-5" />
-              </Button>
+              <a href="#" aria-label="Facebook" className="grid h-10 w-10 place-items-center rounded-full border border-border text-foreground/70 transition-colors hover:border-primary hover:text-primary">
+                <Facebook className="h-4 w-4" />
+              </a>
+              <a href="mailto:meyaarjewellers@gmail.com" aria-label="Email" className="grid h-10 w-10 place-items-center rounded-full border border-border text-foreground/70 transition-colors hover:border-primary hover:text-primary">
+                <Mail className="h-4 w-4" />
+              </a>
             </div>
           </div>
+
+          {columns.map((col) => (
+            <div key={col.title}>
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-foreground">{col.title}</h3>
+              <ul className="space-y-2.5 text-sm">
+                {col.links.map((l) => (
+                  <li key={l.href}>
+                    <Link href={l.href} className="text-muted-foreground transition-colors hover:text-primary">
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        <div className="pt-8 border-t text-center text-sm text-muted-foreground">
-          <p data-testid="text-copyright">
-            © {currentYear} Meyaar Jewellers. All rights reserved.
-          </p>
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 text-center text-xs text-muted-foreground sm:flex-row">
+          <p data-testid="text-copyright">© {currentYear} Meyaar Jewellers. All rights reserved.</p>
+          <p className="tracking-wide">Handcrafted with care · Secure checkout by Stripe</p>
         </div>
       </div>
     </footer>
