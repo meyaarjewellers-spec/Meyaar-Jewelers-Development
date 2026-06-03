@@ -51,6 +51,8 @@ export const paymentStatus = pgEnum("payment_status", [
 
 export const couponType = pgEnum("coupon_type", ["percentage", "fixed"]);
 
+export const reviewStatus = pgEnum("review_status", ["pending", "approved", "rejected"]);
+
 // ---------------------------------------------------------------------------
 // Catalog
 // ---------------------------------------------------------------------------
@@ -256,6 +258,43 @@ export const payments = pgTable(
 );
 
 // ---------------------------------------------------------------------------
+// Reviews
+// ---------------------------------------------------------------------------
+export const reviews = pgTable(
+  "reviews",
+  {
+    id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+    productId: uuid("product_id")
+      .notNull()
+      .references(() => products.id, { onDelete: "cascade" }),
+    // Supabase auth user id (nullable for guest reviews).
+    userId: uuid("user_id"),
+    authorName: varchar("author_name", { length: 120 }).notNull(),
+    rating: integer("rating").notNull(),
+    title: varchar("title", { length: 200 }),
+    content: text("content").notNull(),
+    status: reviewStatus("status").notNull().default("approved"),
+    isVerifiedPurchase: boolean("is_verified_purchase").notNull().default(false),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    productIdx: index("idx_reviews_product").on(t.productId),
+    statusIdx: index("idx_reviews_status").on(t.status),
+  }),
+);
+
+// ---------------------------------------------------------------------------
+// Newsletter
+// ---------------------------------------------------------------------------
+export const newsletterSubscribers = pgTable("newsletter_subscribers", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  source: varchar("source", { length: 50 }).default("site"),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+// ---------------------------------------------------------------------------
 // Inferred types
 // ---------------------------------------------------------------------------
 export type Category = typeof categories.$inferSelect;
@@ -270,6 +309,9 @@ export type OrderItem = typeof orderItems.$inferSelect;
 export type InsertOrderItem = typeof orderItems.$inferInsert;
 export type Payment = typeof payments.$inferSelect;
 export type InsertPayment = typeof payments.$inferInsert;
+export type Review = typeof reviews.$inferSelect;
+export type InsertReview = typeof reviews.$inferInsert;
+export type NewsletterSubscriber = typeof newsletterSubscribers.$inferSelect;
 
 // Validation schema used by the API when accepting cart line items.
 export const cartLineItemSchema = z.object({

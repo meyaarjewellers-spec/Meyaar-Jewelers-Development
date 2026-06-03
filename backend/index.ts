@@ -1,4 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
+import compression from "compression";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 // Importing env loads + validates server environment (and refuses to boot in
@@ -7,6 +8,9 @@ import { env } from "./config/env";
 import { applySecurity } from "./middleware/security";
 
 const app = express();
+
+// gzip/brotli compression for all responses.
+app.use(compression());
 
 // Security headers + CORS allow-list, before any routes.
 applySecurity(app);

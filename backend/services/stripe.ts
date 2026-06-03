@@ -4,6 +4,7 @@
  */
 import Stripe from "stripe";
 import { env } from "../config/env";
+import { log } from "../logger";
 
 let _stripe: Stripe | null = null;
 
@@ -77,7 +78,7 @@ export async function calculateTaxCents(params: {
     });
     return calc.tax_amount_exclusive ?? 0;
   } catch (err) {
-    console.error("Stripe Tax calculation failed; defaulting tax to 0:", err);
+    log(`Stripe Tax calculation failed; defaulting tax to 0: ${(err as Error).message}`, "stripe");
     return 0;
   }
 }

@@ -76,10 +76,22 @@ export function serveStatic(app: Express) {
     );
   }
 
-  app.use(express.static(distPath));
+  // Hashed assets are immutable → cache hard. index.html stays uncached.
+  app.use(
+    express.static(distPath, {
+      setHeaders: (res, filePath) => {
+        if (filePath.endsWith("index.html")) {
+          res.setHeader("Cache-Control", "no-cache");
+        } else if (/\.(js|css|woff2?|png|jpe?g|webp|avif|svg|gif|ico)$/i.test(filePath)) {
+          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+        }
+      },
+    }),
+  );
 
   // fall through to index.html if the file doesn't exist
   app.use("*", (_req, res) => {
+    res.setHeader("Cache-Control", "no-cache");
     res.sendFile(path.resolve(distPath, "index.html"));
   });
 }

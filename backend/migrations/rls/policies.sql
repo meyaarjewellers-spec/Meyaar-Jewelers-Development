@@ -68,3 +68,17 @@ CREATE POLICY order_items_owner_read ON order_items
 -- Only the service_role (server) can touch these.
 -- ----------------------------------------------------------------------------
 -- (intentionally no policies for product_inventory, payments, coupon_codes)
+
+-- ----------------------------------------------------------------------------
+-- Reviews: APPROVED reviews are public-read. Writes go through the server only.
+-- ----------------------------------------------------------------------------
+ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
+CREATE POLICY reviews_public_read ON reviews
+  FOR SELECT TO anon, authenticated
+  USING (status = 'approved');
+
+-- ----------------------------------------------------------------------------
+-- Newsletter: never readable from the browser; server-only writes.
+-- ----------------------------------------------------------------------------
+ALTER TABLE newsletter_subscribers ENABLE ROW LEVEL SECURITY;
+-- (no anon/authenticated policies → browser gets zero rows / cannot write)

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { subscribeNewsletter } from "@/lib/checkoutApi";
 
 export default function FirstTimePopup() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,11 +18,15 @@ export default function FirstTimePopup() {
     }
   }, []);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    // Email capture is wired to the ESP in Priority 2.
     setDone(true);
+    try {
+      await subscribeNewsletter(email, "welcome-popup");
+    } catch {
+      // Non-blocking: the offer still shows even if capture fails transiently.
+    }
     setTimeout(() => setIsOpen(false), 1600);
   };
 

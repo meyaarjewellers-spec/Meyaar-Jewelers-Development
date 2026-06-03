@@ -42,3 +42,29 @@ export async function optionalAuth(req: Request, _res: Response, next: NextFunct
   }
   next();
 }
+
+/** Require a valid Supabase JWT; 401 otherwise. Sets req.userId. */
+export async function requireAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
+  const header = req.headers.authorization;
+  const token = header?.startsWith("Bearer ") ? header.slice(7) : undefined;
+  if (!token) {
+    res.status(401).json({ error: { message: "Authentication required" } });
+    return;
+  }
+  const client = admin();
+  if (!client) {
+    res.status(503).json({ error: { message: "Auth is not configured" } });
+    return;
+  }
+  try {
+    const { data, error } = await client.auth.getUser(token);
+    if (error || !data.user) {
+      res.status(401).json({ error: { message: "Invalid or expired session" } });
+      return;
+    }
+    req.userId = data.user.id;
+    next();
+  } catch {
+    res.status(401).json({ error: { message: "Invalid or expired session" } });
+  }
+}

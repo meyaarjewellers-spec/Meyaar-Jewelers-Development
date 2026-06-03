@@ -80,9 +80,17 @@ const envSchema = z.object({
   STRIPE_SECRET_KEY: requiredInProd("STRIPE_SECRET_KEY"),
   STRIPE_WEBHOOK_SECRET: requiredInProd("STRIPE_WEBHOOK_SECRET"),
 
-  // Email
+  // Email (Gmail for dev, Resend recommended for production)
   GMAIL_USER: z.string().optional(),
   GMAIL_APP_PASSWORD: z.string().optional(),
+  RESEND_API_KEY: z.string().optional(),
+  EMAIL_FROM: z.string().optional(),
+
+  // Public base URL (used in email links / redirects)
+  APP_URL: z.string().optional(),
+
+  // Observability (optional)
+  SENTRY_DSN: z.string().optional(),
 
   // Commerce config (integer cents)
   SHIPPING_FLAT_RATE_CENTS: centsSchema(900),

@@ -1,14 +1,47 @@
 /** POST /api/v1/orders — create a pending order from server-computed totals. */
 import { Router } from "express";
 import { z } from "zod";
-import { cartLineItemSchema } from "../../shared/schema";
+import { desc, eq } from "drizzle-orm";
+import { cartLineItemSchema, orders, orderItems } from "../../shared/schema";
+import { getDb } from "../db";
 import { validateBody } from "../middleware/validate";
-import { optionalAuth } from "../middleware/auth";
+import { optionalAuth, requireAuth } from "../middleware/auth";
 import { computeBreakdown, breakdownToResponse, PricingError } from "../services/pricing";
 import { createPendingOrder } from "../services/orders";
 import { InventoryError } from "../services/inventory";
 
 export const ordersRouter = Router();
+
+/** GET /api/v1/orders/mine — the authenticated user's order history. */
+ordersRouter.get("/orders/mine", requireAuth, async (req, res, next) => {
+  try {
+    const db = getDb();
+    const rows = await db
+      .select()
+      .from(orders)
+      .where(eq(orders.userId, req.userId!))
+      .orderBy(desc(orders.createdAt))
+      .limit(50);
+
+    const withItems = await Promise.all(
+      rows.map(async (o) => {
+        const items = await db.select().from(orderItems).where(eq(orderItems.orderId, o.id));
+        return {
+          orderNumber: o.orderNumber,
+          status: o.status,
+          total: Number(o.total),
+          currency: o.currency,
+          createdAt: o.createdAt,
+          items: items.map((it) => ({ name: it.productName, quantity: it.quantity, unitPrice: Number(it.unitPrice) })),
+        };
+      }),
+    );
+
+    res.json({ data: { orders: withItems } });
+  } catch (err) {
+    next(err);
+  }
+});
 
 const createOrderSchema = z.object({
   items: z.array(cartLineItemSchema).min(1).max(50),

@@ -19,6 +19,8 @@ import { ordersRouter } from "./routes/orders";
 import { paymentsRouter } from "./routes/payments";
 import { webhookRouter } from "./routes/webhook";
 import { contactRouter } from "./routes/contact";
+import { newsletterRouter } from "./routes/newsletter";
+import { reviewsRouter } from "./routes/reviews";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const v1 = "/api/v1";
@@ -32,6 +34,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use(v1, paymentsRouter);
   app.use(v1, webhookRouter);
   app.use(v1, contactRouter);
+  app.use(v1, newsletterRouter);
+  app.use(v1, reviewsRouter);
 
   return createServer(app);
 }
