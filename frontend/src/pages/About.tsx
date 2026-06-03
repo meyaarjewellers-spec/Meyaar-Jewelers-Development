@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Seo from "@/components/Seo";
 import { Card } from "@/components/ui/card";
 import { useCart } from "@/contexts/CartContext";
 import { IMAGES } from "@/lib/imageConfig";
@@ -11,6 +12,7 @@ export default function About() {
   const { itemCount } = useCart();
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <Seo title="Our Story" path="/about" description="The art of craftsmanship — Pakistani heritage, handcrafted in the USA by Meyaar Jewellers." />
       <Header cartItemCount={itemCount} />
       
       <main className="flex-1">

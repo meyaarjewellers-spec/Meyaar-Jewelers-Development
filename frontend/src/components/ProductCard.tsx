@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Heart } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { useWishlist } from "@/contexts/WishlistContext";
 import { useToast } from "@/hooks/use-toast";
 import { StarRating } from "@/components/shared";
 
@@ -22,7 +23,9 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, onQuickView }: ProductCardProps) {
   const { addItem } = useCart();
+  const { has, toggle } = useWishlist();
   const { toast } = useToast();
+  const wished = has(product.id);
 
   const handleAddToBag = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -64,11 +67,17 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
           {/* Wishlist */}
           <button
             type="button"
-            aria-label="Add to wishlist"
-            onClick={(e) => e.preventDefault()}
-            className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-white/80 text-foreground/70 opacity-0 backdrop-blur transition-all duration-300 hover:text-primary group-hover:opacity-100"
+            aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
+            aria-pressed={wished}
+            onClick={(e) => {
+              e.preventDefault();
+              toggle({ id: product.id, name: product.name, price: product.price, image: product.image, category: product.category });
+            }}
+            className={`absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-white/80 backdrop-blur transition-all duration-300 group-hover:opacity-100 ${
+              wished ? "text-primary opacity-100" : "text-foreground/70 opacity-0 hover:text-primary"
+            }`}
           >
-            <Heart className="h-4 w-4" />
+            <Heart className={`h-4 w-4 ${wished ? "fill-primary" : ""}`} />
           </button>
 
           {/* Quick add bar (slides up on hover; tappable on mobile) */}

@@ -12,6 +12,7 @@ declare global {
   namespace Express {
     interface Request {
       userId?: string;
+      userEmail?: string;
     }
   }
 }
@@ -36,7 +37,10 @@ export async function optionalAuth(req: Request, _res: Response, next: NextFunct
 
   try {
     const { data, error } = await client.auth.getUser(token);
-    if (!error && data.user) req.userId = data.user.id;
+    if (!error && data.user) {
+      req.userId = data.user.id;
+      req.userEmail = data.user.email ?? undefined;
+    }
   } catch {
     // Invalid token → treat as guest; do not block the request.
   }
@@ -63,8 +67,21 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
       return;
     }
     req.userId = data.user.id;
+    req.userEmail = data.user.email ?? undefined;
     next();
   } catch {
     res.status(401).json({ error: { message: "Invalid or expired session" } });
   }
+}
+
+/** Require an authenticated user whose email is in ADMIN_EMAILS. */
+export async function requireAdmin(req: Request, res: Response, next: NextFunction): Promise<void> {
+  await requireAuth(req, res, () => {
+    const email = req.userEmail?.toLowerCase();
+    if (!email || !env.ADMIN_EMAILS.includes(email)) {
+      res.status(403).json({ error: { message: "Admin access required" } });
+      return;
+    }
+    next();
+  });
 }

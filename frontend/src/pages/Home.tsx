@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
+import Seo, { BASE_URL } from "@/components/Seo";
 import Header from "@/components/Header";
 import { Hero, BrandStory, Testimonials, Benefits, Newsletter, FirstTimePopup } from "@/components/home";
 import TrustBar from "@/components/home/TrustBar";
@@ -52,6 +53,21 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
+      <Seo
+        title="Meyaar Jewellers"
+        path="/"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Meyaar Jewellers",
+          url: BASE_URL,
+          potentialAction: {
+            "@type": "SearchAction",
+            target: `${BASE_URL}/search?q={search_term_string}`,
+            "query-input": "required name=search_term_string",
+          },
+        }}
+      />
       <FirstTimePopup />
       <Header cartItemCount={itemCount} />
 

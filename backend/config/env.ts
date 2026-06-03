@@ -92,6 +92,12 @@ const envSchema = z.object({
   // Observability (optional)
   SENTRY_DSN: z.string().optional(),
 
+  // Admin access — comma-separated emails allowed into the admin dashboard.
+  ADMIN_EMAILS: z
+    .string()
+    .optional()
+    .transform((v) => (v ? v.split(",").map((s) => s.trim().toLowerCase()).filter(Boolean) : [])),
+
   // Commerce config (integer cents)
   SHIPPING_FLAT_RATE_CENTS: centsSchema(900),
   SHIPPING_FREE_THRESHOLD_CENTS: centsSchema(10_000),

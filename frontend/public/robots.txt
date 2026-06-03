@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /checkout
+Disallow: /checkout-method
+Disallow: /confirmation
+Disallow: /settings
+Disallow: /authentication
+Disallow: /search
+
+Sitemap: https://meyaarjewellers.com/sitemap.xml

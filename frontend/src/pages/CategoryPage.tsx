@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
+import Seo, { BASE_URL } from "@/components/Seo";
 import Header from "@/components/Header";
 import CategoryGrid from "@/components/home/CategoryGrid";
 import { useCart } from "@/contexts/CartContext";
@@ -58,6 +59,19 @@ export default function CategoryPage({ category }: CategoryPageProps) {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <Seo
+        title={title || category}
+        description={description || `Shop handcrafted ${category} from Meyaar Jewellers.`}
+        path={`/shop/${category}`}
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL },
+            { "@type": "ListItem", position: 2, name: title || category, item: `${BASE_URL}/shop/${category}` },
+          ],
+        }}
+      />
       <Header cartItemCount={itemCount} />
 
       <main className="flex-1">

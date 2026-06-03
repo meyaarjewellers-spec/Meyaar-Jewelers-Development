@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearch } from "wouter";
+import Seo from "@/components/Seo";
 import Header from "@/components/Header";
 import CategoryGrid from "@/components/home/CategoryGrid";
 import { useCart } from "@/contexts/CartContext";
@@ -46,6 +47,7 @@ export default function SearchPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <Seo title={query ? `Search: ${query}` : "Search"} path="/search" noIndex />
       <Header cartItemCount={itemCount} />
       <main className="container mx-auto flex-1 px-4 py-14">
         <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Search</p>

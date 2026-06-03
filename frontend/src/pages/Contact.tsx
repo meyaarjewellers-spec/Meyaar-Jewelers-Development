@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Seo from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -46,6 +47,7 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Seo title="Contact" path="/contact" description="Get in touch with Meyaar Jewellers — questions, custom pieces, and more." />
       <Header cartItemCount={itemCount} />
       
       <main className="flex-1">

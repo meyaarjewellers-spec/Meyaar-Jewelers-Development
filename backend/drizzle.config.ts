@@ -1,4 +1,11 @@
 import { defineConfig } from "drizzle-kit";
+import dotenv from "dotenv";
+import path from "path";
+
+// Load server env so DATABASE_URL is available to drizzle-kit. `.env.server` is
+// the canonical server secrets file; `.env.local` is a legacy fallback.
+dotenv.config({ path: path.resolve(process.cwd(), ".env.server") });
+dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 
 // DATABASE_URL is required for `push`/`migrate` (live DB ops). For `generate`
 // (offline SQL generation) a placeholder is fine — no connection is made.

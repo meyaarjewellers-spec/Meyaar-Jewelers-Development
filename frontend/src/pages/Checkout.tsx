@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import { useCart } from "@/contexts/CartContext";
 import { CartItemsList } from "@/components/checkout";
 import { Button } from "@/components/ui/button";
+import { trackBeginCheckout } from "@/lib/analytics";
 
 const FREE_SHIPPING_THRESHOLD = 100;
 
@@ -64,7 +65,13 @@ export default function Checkout() {
                   </div>
                 </div>
 
-                <Button className="mt-6 w-full rounded-full py-6" onClick={() => setLocation("/checkout-method")}>
+                <Button
+                  className="mt-6 w-full rounded-full py-6"
+                  onClick={() => {
+                    trackBeginCheckout(total, items.map((i) => ({ id: i.id, name: i.name, price: i.price, quantity: i.quantity })));
+                    setLocation("/checkout-method");
+                  }}
+                >
                   Proceed to Checkout
                 </Button>
                 <Button variant="ghost" className="mt-2 w-full" onClick={() => setLocation("/")}>

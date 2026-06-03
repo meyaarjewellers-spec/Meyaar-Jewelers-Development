@@ -21,9 +21,14 @@ import { webhookRouter } from "./routes/webhook";
 import { contactRouter } from "./routes/contact";
 import { newsletterRouter } from "./routes/newsletter";
 import { reviewsRouter } from "./routes/reviews";
+import { sitemapRouter } from "./routes/sitemap";
+import { adminRouter } from "./routes/admin";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const v1 = "/api/v1";
+
+  // Root-level SEO route (must be registered before the SPA catch-all).
+  app.use(sitemapRouter);
 
   // Baseline rate limit across the API (sensitive routes add stricter limits).
   app.use("/api", apiLimiter);
@@ -36,6 +41,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use(v1, contactRouter);
   app.use(v1, newsletterRouter);
   app.use(v1, reviewsRouter);
+  app.use(v1, adminRouter);
 
   return createServer(app);
 }

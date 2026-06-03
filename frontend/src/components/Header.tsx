@@ -1,8 +1,9 @@
 import { Link, useLocation } from "wouter";
-import { Menu, X, User, Search } from "lucide-react";
+import { Menu, X, User, Search, Heart } from "lucide-react";
 import { useState } from "react";
 import { IMAGES } from "@/lib/imageConfig";
 import { useAuth } from "@/contexts/AuthContext";
+import { useWishlist } from "@/contexts/WishlistContext";
 import CartDrawer from "@/components/CartDrawer";
 
 interface HeaderProps {
@@ -23,6 +24,7 @@ export default function Header({ cartItemCount = 0 }: HeaderProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
   const { user } = useAuth();
+  const { count: wishlistCount } = useWishlist();
 
   const submitSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,6 +80,14 @@ export default function Header({ cartItemCount = 0 }: HeaderProps) {
             >
               <Search className="h-5 w-5" />
             </button>
+            <Link href="/wishlist" aria-label="Wishlist" className="relative hidden p-2 text-foreground/80 transition-colors hover:text-primary sm:block">
+              <Heart className="h-5 w-5" />
+              {wishlistCount > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 grid h-4 w-4 place-items-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
             <Link href={user ? "/settings" : "/authentication"} data-testid="link-user" className="p-2 text-foreground/80 transition-colors hover:text-primary">
               <User className="h-5 w-5" />
             </Link>

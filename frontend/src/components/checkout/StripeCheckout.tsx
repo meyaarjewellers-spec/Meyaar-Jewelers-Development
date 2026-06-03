@@ -18,6 +18,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { getStripePromise, stripeConfigured } from "@/lib/stripeClient";
 import { createOrder, createPaymentIntent, type OrderResponse, type ShippingAddress } from "@/lib/checkoutApi";
+import { trackPurchase } from "@/lib/analytics";
 
 interface StripeCheckoutProps {
   couponCode?: string;
@@ -55,6 +56,7 @@ function PaymentForm({ order, onSuccess, onError }: { order: OrderResponse; onSu
 
     if (paymentIntent && (paymentIntent.status === "succeeded" || paymentIntent.status === "processing")) {
       // The webhook is the source of truth for fulfillment; the UI just advances.
+      trackPurchase(order.orderNumber, order.total);
       onSuccess({ orderNumber: order.orderNumber, orderId: order.orderId });
     } else {
       const msg = "Payment could not be completed.";

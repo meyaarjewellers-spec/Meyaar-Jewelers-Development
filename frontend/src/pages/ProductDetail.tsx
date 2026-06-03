@@ -1,6 +1,7 @@
 import { useRoute, Link } from "wouter";
 import { useState, useEffect } from "react";
 import { Truck, ShieldCheck, RefreshCcw } from "lucide-react";
+import Seo, { BASE_URL } from "@/components/Seo";
 import Header from "@/components/Header";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
@@ -14,6 +15,7 @@ import {
   CustomerReviews
 } from "@/components/product";
 import { getProductWithImages, getProductsFromOtherCategories } from "@/lib/productCatalog";
+import { trackViewItem } from "@/lib/analytics";
 
 export default function ProductDetail() {
   const [, params] = useRoute("/product/:id");
@@ -34,7 +36,13 @@ export default function ProductDetail() {
 
         if (currentProduct) {
           setProduct(currentProduct);
-          
+          trackViewItem({
+            id: currentProduct.id,
+            name: currentProduct.name,
+            price: Number(currentProduct.discount_price ?? currentProduct.base_price),
+            category: currentProduct.category?.name,
+          });
+
           // Scroll to top when product loads
           window.scrollTo({ top: 0, behavior: 'smooth' });
           
@@ -108,10 +116,56 @@ export default function ProductDetail() {
     setQuantity(1);
   };
 
+  const price = Number(product.discount_price ?? product.base_price);
+
   return (
     <div className="min-h-screen flex flex-col">
+      <Seo
+        title={product.name}
+        description={product.description || `${product.name} — handcrafted by Meyaar Jewellers.`}
+        path={`/product/${product.id}`}
+        type="product"
+        image={primaryImage}
+        jsonLd={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: product.name,
+            description: product.description || undefined,
+            image: (product.product_images || []).map((i: any) => i.image_url).filter(Boolean),
+            sku: product.sku || undefined,
+            brand: { "@type": "Brand", name: "Meyaar Jewellers" },
+            ...(product.material ? { material: product.material } : {}),
+            offers: {
+              "@type": "Offer",
+              price: price.toFixed(2),
+              priceCurrency: (product.currency || "USD"),
+              availability: "https://schema.org/InStock",
+              url: `${BASE_URL}/product/${product.id}`,
+            },
+            ...(product.average_rating && product.total_reviews
+              ? {
+                  aggregateRating: {
+                    "@type": "AggregateRating",
+                    ratingValue: Number(product.average_rating),
+                    reviewCount: product.total_reviews,
+                  },
+                }
+              : {}),
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL },
+              { "@type": "ListItem", position: 2, name: categoryName, item: `${BASE_URL}/shop/${categoryName}` },
+              { "@type": "ListItem", position: 3, name: product.name, item: `${BASE_URL}/product/${product.id}` },
+            ],
+          },
+        ]}
+      />
       <Header cartItemCount={itemCount} />
-      
+
       <main className="flex-1">
         <div className="container mx-auto px-4 py-10">
           {/* Breadcrumb */}
