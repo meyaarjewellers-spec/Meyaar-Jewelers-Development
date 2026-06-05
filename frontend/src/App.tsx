@@ -28,6 +28,7 @@ const TermsConditions = lazy(() => import("@/pages/TermsConditions"));
 const ReturnPolicy = lazy(() => import("@/pages/ReturnPolicy"));
 const ShippingPolicy = lazy(() => import("@/pages/ShippingPolicy"));
 const Wishlist = lazy(() => import("@/pages/Wishlist"));
+const Admin = lazy(() => import("@/pages/Admin"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function RouteFallback() {
@@ -54,6 +55,7 @@ function Router() {
         <Route path="/confirmation" component={Confirmation} />
         <Route path="/authentication" component={Authentication} />
         <Route path="/settings" component={Settings} />
+        <Route path="/admin" component={Admin} />
         <Route path="/about" component={About} />
         <Route path="/contact" component={Contact} />
         <Route path="/privacy-policy" component={PrivacyPolicy} />
@@ -81,9 +83,17 @@ function App() {
         <CartProvider>
           <WishlistProvider>
             <TooltipProvider>
+              <a
+                href="#main-content"
+                className="sr-only z-[100] rounded-md bg-primary px-4 py-2 text-primary-foreground focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+              >
+                Skip to content
+              </a>
               <PromoBar />
               <Toaster />
-              <Router />
+              <div id="main-content">
+                <Router />
+              </div>
               {showFooter && <Footer />}
               <ConsentBanner />
             </TooltipProvider>

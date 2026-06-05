@@ -23,6 +23,7 @@ import { newsletterRouter } from "./routes/newsletter";
 import { reviewsRouter } from "./routes/reviews";
 import { sitemapRouter } from "./routes/sitemap";
 import { adminRouter } from "./routes/admin";
+import { addressesRouter } from "./routes/addresses";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const v1 = "/api/v1";
@@ -42,6 +43,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use(v1, newsletterRouter);
   app.use(v1, reviewsRouter);
   app.use(v1, adminRouter);
+  app.use(v1, addressesRouter);
 
   return createServer(app);
 }

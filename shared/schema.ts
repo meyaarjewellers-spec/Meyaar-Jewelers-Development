@@ -284,6 +284,29 @@ export const reviews = pgTable(
 );
 
 // ---------------------------------------------------------------------------
+// Saved addresses (address book) — tied to a Supabase auth user
+// ---------------------------------------------------------------------------
+export const userAddresses = pgTable(
+  "user_addresses",
+  {
+    id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+    userId: uuid("user_id").notNull(),
+    fullName: varchar("full_name", { length: 255 }).notNull(),
+    phone: varchar("phone", { length: 30 }),
+    line1: varchar("line1", { length: 255 }).notNull(),
+    line2: varchar("line2", { length: 255 }),
+    city: varchar("city", { length: 120 }).notNull(),
+    state: varchar("state", { length: 120 }),
+    postalCode: varchar("postal_code", { length: 20 }).notNull(),
+    country: varchar("country", { length: 2 }).notNull().default("US"),
+    isDefault: boolean("is_default").notNull().default(false),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({ userIdx: index("idx_user_addresses_user").on(t.userId) }),
+);
+
+// ---------------------------------------------------------------------------
 // Newsletter
 // ---------------------------------------------------------------------------
 export const newsletterSubscribers = pgTable("newsletter_subscribers", {
@@ -312,6 +335,8 @@ export type InsertPayment = typeof payments.$inferInsert;
 export type Review = typeof reviews.$inferSelect;
 export type InsertReview = typeof reviews.$inferInsert;
 export type NewsletterSubscriber = typeof newsletterSubscribers.$inferSelect;
+export type UserAddress = typeof userAddresses.$inferSelect;
+export type InsertUserAddress = typeof userAddresses.$inferInsert;
 
 // Validation schema used by the API when accepting cart line items.
 export const cartLineItemSchema = z.object({

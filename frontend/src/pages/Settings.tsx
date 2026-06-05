@@ -8,6 +8,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle, Package } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { fetchMyOrders, type AccountOrder } from "@/lib/checkoutApi";
+import { adminApi } from "@/lib/adminApi";
+import AddressBook from "@/components/account/AddressBook";
 
 const STATUS_STYLES: Record<string, string> = {
   paid: "bg-primary/10 text-primary",
@@ -27,6 +29,7 @@ export default function Settings() {
   const [error, setError] = useState<string | null>(null);
   const [orders, setOrders] = useState<AccountOrder[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -41,6 +44,7 @@ export default function Settings() {
         if (mounted) setOrdersLoading(false);
       }
     })();
+    adminApi.me().then(() => mounted && setIsAdmin(true)).catch(() => {});
     return () => {
       mounted = false;
     };
@@ -150,6 +154,24 @@ export default function Settings() {
             )}
           </CardContent>
         </Card>
+
+        {/* Saved addresses */}
+        <AddressBook />
+
+        {/* Admin */}
+        {isAdmin && (
+          <Card className="mt-6 border-primary/30">
+            <CardHeader>
+              <CardTitle className="font-serif text-xl">Store Management</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4 text-sm text-muted-foreground">Manage orders, products, inventory, reviews, and subscribers.</p>
+              <Link href="/admin">
+                <Button className="rounded-full px-8">Open Admin Dashboard</Button>
+              </Link>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Sign out */}
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">

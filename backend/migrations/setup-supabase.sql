@@ -267,6 +267,34 @@ CREATE POLICY "reviews_public_read" ON "reviews" FOR SELECT TO anon, authenticat
 -- inventory, payments, coupon_codes, newsletter_subscribers: RLS on, no policies
 -- → anon/authenticated get zero rows; only the server (service_role) can touch them.
 
+-- ---------- Address book (saved shipping addresses) ------------------------
+CREATE TABLE IF NOT EXISTS "user_addresses" (
+  "id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+  "user_id" uuid NOT NULL,
+  "full_name" varchar(255) NOT NULL,
+  "phone" varchar(30),
+  "line1" varchar(255) NOT NULL,
+  "line2" varchar(255),
+  "city" varchar(120) NOT NULL,
+  "state" varchar(120),
+  "postal_code" varchar(20) NOT NULL,
+  "country" varchar(2) NOT NULL DEFAULT 'US',
+  "is_default" boolean NOT NULL DEFAULT false,
+  "created_at" timestamp with time zone DEFAULT now(),
+  "updated_at" timestamp with time zone DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS "idx_user_addresses_user" ON "user_addresses" ("user_id");
+
+ALTER TABLE "user_addresses" ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "addresses_owner_select" ON "user_addresses";
+CREATE POLICY "addresses_owner_select" ON "user_addresses" FOR SELECT TO authenticated USING (user_id = auth.uid());
+DROP POLICY IF EXISTS "addresses_owner_insert" ON "user_addresses";
+CREATE POLICY "addresses_owner_insert" ON "user_addresses" FOR INSERT TO authenticated WITH CHECK (user_id = auth.uid());
+DROP POLICY IF EXISTS "addresses_owner_update" ON "user_addresses";
+CREATE POLICY "addresses_owner_update" ON "user_addresses" FOR UPDATE TO authenticated USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
+DROP POLICY IF EXISTS "addresses_owner_delete" ON "user_addresses";
+CREATE POLICY "addresses_owner_delete" ON "user_addresses" FOR DELETE TO authenticated USING (user_id = auth.uid());
+
 -- ============================================================================
 -- Done. Re-running this file is safe.
 -- ============================================================================
